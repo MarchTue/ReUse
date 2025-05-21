@@ -1,0 +1,109 @@
+# ========================
+# Global
+# ========================
+*.log
+*.tmp
+*.swp
+*.bak
+.DS_Store
+Thumbs.db
+
+# OS-specific
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# IDEs and editors
+.idea/
+*.iml
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# ========================
+# Java / Spring Boot
+# ========================
+/target/
+out/
+*.class
+*.jar
+*.war
+*.ear
+
+# Spring Boot local settings
+*.db
+*.h2.db
+*.mv.db
+*.log
+
+# ========================
+# Node.js & Web3.js
+# ========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env
+.env.*
+*.env.local
+
+# Dependency locks
+package-lock.json
+yarn.lock
+
+# build output
+/dist/
+/build/
+/coverage/
+/webpack-stats.json
+
+# Cache
+.cache/
+.nyc_output/
+
+# Lint and test
+.eslintcache
+.jest/
+
+# Web3.js temporary & generated files
+web3-provider-engine-test.log
+ganache-cli.log
+web3-temp/
+*.abi
+*.bin
+
+# ========================
+# Blockchain (Truffle, Hardhat, Foundry 등)
+# ========================
+/artifacts/
+/cache/
+/deployments/
+/coverage/
+/typechain/
+/build/
+/node_modules/
+/.env.local
+.env.*.local
+.secret
+.wallet
+*.pid
+
+# Common contract artifacts
+*.abi
+*.bin
+
+# ========================
+# Docker (if used)
+# ========================
+docker-compose.override.yml
+*.pid
+
+# ========================
+# IntelliJ / Eclipse
+# ========================
+*.iws
+*.ipr
+*.class
+*.project
+*.classpath

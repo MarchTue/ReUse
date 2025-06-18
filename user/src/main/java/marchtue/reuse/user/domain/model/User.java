@@ -68,7 +68,7 @@ public class User extends BaseEntity {
   @OneToMany(mappedBy = "RECENT_WORDS", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecentWord> recentWords = new ArrayList<>();
 
-  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+  @OneToOne(mappedBy = "USERS", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
   private UserRating userRating;
 
 }

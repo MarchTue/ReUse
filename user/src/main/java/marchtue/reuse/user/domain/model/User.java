@@ -23,7 +23,7 @@ import marchtue.reuse.user.global.common.BaseEntity;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "users", schema = "user")
+@Table(name = "user_infos")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -65,10 +65,10 @@ public class User extends BaseEntity {
   @Min(0)
   private Integer reportedCnt = 0;
 
-  @OneToMany(mappedBy = "RECENT_WORDS", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecentWord> recentWords = new ArrayList<>();
 
-  @OneToOne(mappedBy = "USERS", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private UserRating userRating;
 
 }

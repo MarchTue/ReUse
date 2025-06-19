@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaCredentialRepository extends CredentialRepository,
-    JpaRepository<UUID, Credential> {
+    JpaRepository<Credential, UUID> {
 
 }

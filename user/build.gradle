@@ -30,6 +30,7 @@ dependencies {
     testAnnotationProcessor("org.projectlombok:lombok:1.18.38")
 
     implementation 'org.postgresql:postgresql'
+    implementation 'org.apache.commons:commons-text:1.10.0'
 }
 
 tasks.named('test') {

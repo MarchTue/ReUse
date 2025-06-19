@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JpaUserRatingRepository extends UserRatingRepository,
-    JpaRepository<UUID, UserRating> {
+    JpaRepository<UserRating, UUID> {
 
 }

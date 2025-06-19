@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Getter
 @MappedSuperclass
-public class BaseEntityNonUpdated {
+public abstract class BaseEntityNonUpdated {
 
 
   @Column(name = "created_by", nullable = false, length = 100)

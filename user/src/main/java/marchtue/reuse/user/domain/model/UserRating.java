@@ -18,7 +18,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "user_ratings", schema = "user")
+@Table(name = "user_ratings")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -41,7 +41,7 @@ public class UserRating extends BaseEntity {
   private BigDecimal rateScore = BigDecimal.ZERO;
 
   @OneToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false, unique = true)
+  @JoinColumn(name = "user_id")
   private User user;
 
 }

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "recent_words", schema = "user")
+@Table(name = "recent_words")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

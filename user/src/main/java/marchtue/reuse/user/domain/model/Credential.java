@@ -16,7 +16,7 @@ import marchtue.reuse.user.global.common.BaseEntityNonUpdated;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "credentials", schema = "user")
+@Table(name = "credentials")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

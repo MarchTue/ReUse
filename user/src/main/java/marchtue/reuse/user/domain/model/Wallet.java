@@ -18,7 +18,7 @@ import marchtue.reuse.user.global.common.BaseEntity;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "wallets", schema = "user")
+@Table(name = "wallets")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

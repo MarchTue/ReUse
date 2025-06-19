@@ -1,0 +1,126 @@
+package marchtue.reuse.user.application.service;
+
+import java.util.Map;
+import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import marchtue.reuse.user.application.dto.request.CheckUserRequest;
+import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
+import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
+import marchtue.reuse.user.domain.model.Credential;
+import marchtue.reuse.user.domain.model.User;
+import marchtue.reuse.user.domain.model.Wallet;
+import marchtue.reuse.user.domain.repository.CredentialRepository;
+import marchtue.reuse.user.domain.repository.UserRepository;
+import marchtue.reuse.user.domain.repository.WalletRepository;
+import marchtue.reuse.user.exception.BusinessException;
+import marchtue.reuse.user.exception.ErrorCode;
+import marchtue.reuse.user.global.dto.ApiResponse;
+import marchtue.reuse.user.global.util.NicknameFilter;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+  private final UserRepository userRepository;
+  private final CredentialRepository credentialRepository;
+  private final WalletRepository walletRepository;
+
+  public ApiResponse checkNickname(NicknameCheckRequest req) {
+    String nickname = req.nickname();
+    // 바코드 패턴 검사
+    if (nickname.length() < 2 || isBarcodePattern(nickname)) {
+      throw new BusinessException(ErrorCode.INVALID_NICKNAME);
+    }
+
+    // 금지어 검사
+    if (NicknameFilter.isOffensiveNickname(nickname, 1)) {
+      throw new BusinessException(ErrorCode.BADWORD_NICKNAME);
+    }
+
+    // 중복 검사
+    if (findByNickname(nickname) != null) {
+      throw new BusinessException(ErrorCode.DUPLICATED_NICKNAME);
+    }
+
+    return new ApiResponse(200, "succeeded", null);
+
+  }
+
+  private boolean isBarcodePattern(String nickname) {
+    if (nickname == null || nickname.length() < 2) {
+      return false;
+    }
+    String barcodeChars = nickname.replaceAll("[^l1iI|]", "");
+    double ratio = (double) barcodeChars.length() / nickname.length();
+    return ratio >= 0.8;
+  }
+
+  // 회원유무확인
+  public ApiResponse checkUser(CheckUserRequest req) {
+    // ci_hs 가 일치하는 회원 찾기
+    User user = userRepository.findByCiHs(req.ci_hs());
+
+    // 없다면 회원가입 추가정보 요청 응답
+    if (user == null) {
+      return new ApiResponse(404, "user not found", "");
+    }
+
+    // 있고, 새로운 did면 추가
+    if (credentialRepository.findByDid(req.did())) {
+      Credential credential = Credential.create(req.did(), user);
+      credentialRepository.save(credential);
+
+      // 로그인 요청 (추가필요)
+    } else {
+      // 있고, 기존의 did면 로그인 처리
+      // 로그인 요청 (추가필요)
+      return null;
+    }
+    return null;
+  }
+
+  // 회원가입
+  @Transactional
+  public ApiResponse registerUser(UserAddInfoRequest req) {
+
+    // 닉네임 중복 검사
+    if (findByNickname(req.nickname()) != null) {
+      throw new BusinessException(ErrorCode.DUPLICATED_NICKNAME);
+    }
+
+    User user = User.create(
+        req.ci_hs(),
+        req.name(),
+        req.phone(),
+        req.nickname(),
+        req.profileImage());
+    User savedUser = userRepository.save(user);
+
+    if (req.accountInfo().bank() != null) {
+      savedUser.addBank(savedUser, req.accountInfo().bank(), req.accountInfo().account());
+      userRepository.save(savedUser);
+    }
+    // 지갑 정보 등록
+    if (req.walletInfo().platform() != null) {
+      Wallet wallet = Wallet.create(
+          req.walletInfo().address(),
+          req.walletInfo().type(),
+          req.walletInfo().platform(),
+          savedUser);
+      walletRepository.save(wallet);
+    }
+
+    Map<String, UUID> response = Map.of("user_id", savedUser.getId());
+
+    return new ApiResponse(200, "succeeded", response);
+
+  }
+
+  private User findByNickname(String nickname) {
+    return userRepository.findByNickname(nickname.toLowerCase());
+  }
+
+
+}

@@ -1,6 +1,7 @@
 package marchtue.reuse.user.userServiceTest;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
@@ -105,8 +106,8 @@ public class CheckNicknameTest {
       ApiResponse result = userService.checkNickname(req);
 
       // then
-      assert result.code() == 200;
-      assert result.msg().equals("succeeded");
+      assertEquals(200, result.code());
+      assertEquals("succeeded", result.msg());
     }
 
 

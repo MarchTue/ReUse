@@ -24,7 +24,7 @@ public class UserService {
 
     // 금지어 검사
     if (NicknameFilter.isOffensiveNickname(nickname, 1)) {
-      throw new BusinessException(ErrorCode.INVALID_NICKNAME);
+      throw new BusinessException(ErrorCode.BADWORD_NICKNAME);
     }
 
     // 중복 검사
@@ -45,4 +45,15 @@ public class UserService {
     return ratio >= 0.8;
   }
 
+  // 회원가입-회원유무확인
+//  public ApiResponse checkUser(CheckUserRequest req) {
+//    // ci_hs 가 일치하는 회원 찾기
+//
+//
+//    // 없다면 회원가입 추가정보 요청 응답
+//
+//    // 있고, 새로운 did면 추가
+//
+//    // 있고, 기존의 did면 로그인 처리
+//  }
 }

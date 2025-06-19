@@ -1,6 +1,6 @@
 package marchtue.reuse.user.domain.enums;
 
-public enum BackEnum {
+public enum BankEnum {
 
   KAKAO_BANK("카카오뱅크"),
   TOSS_BANK("토스뱅크"),
@@ -22,7 +22,7 @@ public enum BackEnum {
 
   private final String koreanName;
 
-  BackEnum(String koreanName) {
+  BankEnum(String koreanName) {
     this.koreanName = koreanName;
   }
 

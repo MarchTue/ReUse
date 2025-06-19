@@ -17,7 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import marchtue.reuse.user.domain.enums.BackEnum;
+import marchtue.reuse.user.domain.enums.BankEnum;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.global.common.BaseEntity;
 import org.hibernate.annotations.UuidGenerator;
@@ -37,7 +37,7 @@ public class User extends BaseEntity {
   private UUID id;
 
   @Column(updatable = false, nullable = false)
-  private String uniqueCre;
+  private String ciHs;
 
   @Column(length = 20)
   private String username;
@@ -54,7 +54,7 @@ public class User extends BaseEntity {
   private UserRoleEnum role;
 
   @Column(length = 20)
-  private BackEnum bank;
+  private BankEnum bank;
 
   @Column(length = 30)
   private String account;
@@ -71,4 +71,30 @@ public class User extends BaseEntity {
   @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private UserRating userRating;
 
+  public static User create(
+      String ciHs,
+      String username,
+      String phoneNumber,
+      String nickname,
+      String profileImage
+  ) {
+    return User.builder()
+        .ciHs(ciHs)
+        .username(username)
+        .phoneNumber(phoneNumber)
+        .nickname(nickname)
+        .profileImage(profileImage)
+        .role(UserRoleEnum.ROLE_USER)
+        .build();
+  }
+
+  public User addBank(
+      User user,
+      BankEnum bank,
+      String account
+  ) {
+    user.bank = bank;
+    user.account = account;
+    return user;
+  }
 }

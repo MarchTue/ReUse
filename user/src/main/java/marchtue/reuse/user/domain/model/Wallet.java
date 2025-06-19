@@ -41,4 +41,17 @@ public class Wallet extends BaseEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
+  public static Wallet create(
+      String address,
+      EWalletTypeEnum type,
+      EWalletPlatformEnum platform,
+      User user
+  ) {
+    return Wallet.builder()
+        .address(address)
+        .type(type)
+        .platform(platform)
+        .user(user)
+        .build();
+  }
 }

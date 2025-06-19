@@ -35,4 +35,14 @@ public class Credential extends BaseEntityNonUpdated {
   @JoinColumn(name = "user_id")
   private User user;
 
+  public static Credential create(
+      String did,
+      User user
+  ) {
+    return Credential.builder()
+        .did(did)
+        .user(user)
+        .build();
+  }
+
 }

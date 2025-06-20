@@ -3,6 +3,8 @@
 
 ### 0.1.0
 
+2025.06.21
+
 Project Initialization
 
 Set up project packages.
@@ -41,4 +43,18 @@ npx shadcn@latest add button input card badge avatar separator tabs switch check
 ```
 
 ### Tailwind Config
+
+[tailwind Config](../tailwind.config.ts)
+
+### util.ts
+
+Add utility functions. 
+
+- formatPrice
+- formatDate
+
+### prettier & eslint
+
+add configs.
+
 

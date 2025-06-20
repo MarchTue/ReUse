@@ -5,6 +5,10 @@
 
 2025.06.21
 
+@YooByWk
+
+---
+
 Project Initialization
 
 Set up project packages.
@@ -42,19 +46,29 @@ npx shadcn@latest init
 npx shadcn@latest add button input card badge avatar separator tabs switch checkbox radio-group select textarea label alert-dialog dropdown-menu accordion toast
 ```
 
-### Tailwind Config
+#### Tailwind Config
 
 [tailwind Config](../tailwind.config.ts)
 
-### util.ts
+#### util.ts
 
 Add utility functions. 
 
 - formatPrice
 - formatDate
 
-### prettier & eslint
+#### prettier & eslint
 
 add configs.
 
+
+##  0.1.1 
+2025.06.21
+
+@YooByWk
+
+1. Created `ThemeProvider` and Applied to `app/layout.tsx`
+2. Changed `globals.css` 
+3. Create `Manifest.json`
+4. Add package : `tailwindcss-animate`
 

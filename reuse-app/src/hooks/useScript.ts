@@ -7,7 +7,6 @@ export function useScript(src: string): boolean {
   useEffect(() => {
     if (document.querySelector(`script[src="${src}"]`)) {
       setLoaded(true);
-      console.log('이미 로딩되었습니다');
       return;
     }
     const script = document.createElement("script");

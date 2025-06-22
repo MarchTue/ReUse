@@ -94,3 +94,7 @@ body {
     color: hsl(var(--foreground));
   }
 }
+
+.oacx-island * {
+  all: initial !important;
+}

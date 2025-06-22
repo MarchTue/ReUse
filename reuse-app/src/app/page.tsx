@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+
 import { useAuthStore } from "@/store/auth";
 import { ArrowRight, Shield, ShoppingBag, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -95,7 +96,7 @@ export default function OnboardingPage() {
       {/* Bottom Actions */}
       <div className="px-8 pb-12 space-y-4 relative z-10">
         <Button
-          onClick={() => router.push("/auth/did")}
+          onClick={() => router.push("/verification")}
           className="w-full h-14 bg-white text-gray-900 hover:bg-gray-100 font-semibold text-lg rounded-2xl shadow-lg"
         >
           시작하기

@@ -1,5 +1,3 @@
-
-
 // app constant
 export const APP_CONFIG = {
   name: "Re-Use",
@@ -22,3 +20,4 @@ export const PRODUCT_CONDITIONS = [
   { value: "fair", label: "중" },
   { value: "poor", label: "하" },
 ] as const;
+

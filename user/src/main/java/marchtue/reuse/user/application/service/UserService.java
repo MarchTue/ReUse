@@ -123,4 +123,7 @@ public class UserService {
   }
 
 
+  public User findByCi(String ciHs) {
+    return userRepository.findByCiHs(ciHs);
+  }
 }

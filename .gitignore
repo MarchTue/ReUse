@@ -107,3 +107,5 @@ docker-compose.override.yml
 *.class
 *.project
 *.classpath
+
+*.yml

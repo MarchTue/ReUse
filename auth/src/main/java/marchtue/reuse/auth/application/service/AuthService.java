@@ -1,5 +1,7 @@
 package marchtue.reuse.auth.application.service;
 
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,4 +61,31 @@ public class AuthService {
 
     return new ApiResponse<>(200, "logined", List.of(Map.of("user_id", user.userId())));
   }
+
+  // 토큰 재발급
+  public ApiResponse reissue(HttpServletRequest request, HttpServletResponse response) {
+    String refreshToken = jwtUtil.getTokenFromCookie(request, jwtUtil.REFRESH_TOKEN_COOKIE);
+
+    if (refreshToken == null || !jwtUtil.validateToken(refreshToken)) {
+      return new ApiResponse(401, "invalid token", null);
+    }
+
+    Claims claims = jwtUtil.getUserInfoFromToken(refreshToken);
+    String username = claims.getSubject();
+
+    String newAccessToken = jwtUtil.createAccessToken(username);
+//    String newRefreshToken = jwtUtil.createRefreshToken(username);
+
+    HttpHeaders accessHeader = jwtUtil.createAccessTokenHeader(newAccessToken);
+    response.addHeader(jwtUtil.AUTHORIZATION_HEADER,
+        accessHeader.getFirst(jwtUtil.AUTHORIZATION_HEADER));
+//    ResponseCookie refreshCookie = jwtUtil.createRefreshTokenCookie(newRefreshToken);
+//    response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+    return new ApiResponse(200, "token issued", null);
+
+  }
+
+
 }
+

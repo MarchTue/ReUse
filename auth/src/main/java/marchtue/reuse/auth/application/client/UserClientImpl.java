@@ -22,7 +22,7 @@ public class UserClientImpl implements UserClient {
     request.put("ci_sh", ciSh);
 
     String url = "http://user-service:19091/internal/users/ci";
-
+    
     return restTemplate.postForObject(url, request, UserInfoResponse.class);
   }
 }

@@ -33,4 +33,10 @@ public class AuthContoller {
     return authService.certify(req, httpResponse);
 
   }
+
+  // 토큰 재발급
+  @PostMapping("/reissue")
+  public ApiResponse reisuueToken(HttpServletRequest request, HttpServletResponse response) {
+    return authService.reissue(request, response);
+  }
 }

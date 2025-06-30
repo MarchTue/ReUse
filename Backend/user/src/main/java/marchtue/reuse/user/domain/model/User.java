@@ -4,7 +4,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -20,7 +19,6 @@ import lombok.NoArgsConstructor;
 import marchtue.reuse.user.domain.enums.BankEnum;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.global.common.BaseEntity;
-import org.hibernate.annotations.UuidGenerator;
 
 @Entity
 @Table(name = "user_infos")
@@ -31,8 +29,6 @@ import org.hibernate.annotations.UuidGenerator;
 public class User extends BaseEntity {
 
   @Id
-  @GeneratedValue
-  @UuidGenerator
   @Column(updatable = false, nullable = false)
   private UUID id;
 
@@ -60,11 +56,12 @@ public class User extends BaseEntity {
   private String account;
 
   @Min(0)
-  private Long token = 0L;
+  private Long token;
 
   @Min(0)
-  private Integer reportedCnt = 0;
+  private Integer reportedCnt;
 
+  @Builder.Default
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<RecentWord> recentWords = new ArrayList<>();
 
@@ -78,14 +75,22 @@ public class User extends BaseEntity {
       String nickname,
       String profileImage
   ) {
-    return User.builder()
+    UUID generatedId = UUID.randomUUID();
+
+    User user = User.builder()
+        .id(generatedId)
         .ciHs(ciHs)
         .username(username)
         .phoneNumber(phoneNumber)
         .nickname(nickname)
         .profileImage(profileImage)
         .role(UserRoleEnum.ROLE_USER)
+        .token(0L)
+        .reportedCnt(0)
         .build();
+
+    user.setCreatedBy(generatedId);
+    return user;
   }
 
   public User addBank(

@@ -8,6 +8,7 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
+import marchtue.reuse.user.global.util.RequestUtil;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -42,22 +43,31 @@ public abstract class BaseEntity {
   @ColumnDefault("false")
   private boolean isDeleted;
 
+  public void setCreatedBy(UUID userId) {
+    this.createdBy = userId;
+  }
+
   @PrePersist
   public void createBase() {
     this.createdAt = LocalDateTime.now();
-    this.createdBy = UUID.randomUUID(); // 임시.수정필요
-//    this.createdBy = RequestUtil.getCurrentUserId();
+
+    if (this.createdBy == null) {
+      UUID userId = RequestUtil.getCurrentUserId();
+      if (userId != null) {
+        this.createdBy = userId;
+      }
+    }
   }
 
   @PreUpdate
   public void updateBase() {
     this.updatedAt = LocalDateTime.now();
-//    this.updatedBy = RequestUtil.getCurrentUserId();
+    this.updatedBy = RequestUtil.getCurrentUserId();
   }
 
   public void deleteBase() {
     this.isDeleted = true;
     this.deletedAt = LocalDateTime.now();
-//    this.deletedBy = RequestUtil.getCurrentUserId();
+    this.deletedBy = RequestUtil.getCurrentUserId();
   }
 }

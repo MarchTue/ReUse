@@ -22,7 +22,7 @@ export async function POST(
 
   try {
     const parsed = await axios.post(
-      API_URL + '/token',
+      API_URL + 'token',
       {
         token
       }

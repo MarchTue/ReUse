@@ -71,7 +71,6 @@ export default function VerificationPage() {
               let parsed;
               try {
                 parsed = JSON.parse(res);
-
                 const parsedToken = await nextClient.postNext(
                   '/auth/raonParse',
                   { token: parsed.token }
@@ -90,7 +89,6 @@ export default function VerificationPage() {
                 );
                 // 백엔드 검증 혹은 유저 확인
                 const hashedCi = nextResponse.data.hashedCi;
-
                 // 검사 결과에 따른 다음 리디렉션
 
                 // 인증 및 해싱 성공 후 리디렉션

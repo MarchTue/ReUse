@@ -30,4 +30,11 @@ public class Category {
 
   private String name;
 
+
+  public static Category create(String name) {
+    return Category.builder()
+        .isActive(true)
+        .name(name)
+        .build();
+  }
 }

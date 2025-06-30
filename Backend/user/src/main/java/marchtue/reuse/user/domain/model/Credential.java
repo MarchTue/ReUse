@@ -39,10 +39,12 @@ public class Credential extends BaseEntityNonUpdated {
       String did,
       User user
   ) {
-    return Credential.builder()
+    Credential credential = Credential.builder()
         .did(did)
         .user(user)
         .build();
+    credential.setCreatedBy(user.getId());
+    return credential;
   }
 
 }

@@ -37,7 +37,7 @@ public class AuthService {
     }
 
     // 기존 이용자
-    // -> kafka : did 기존 존재 여부 확인 없을 시 user-service에서 추가
+    userClient.DidCheckDid(user.userId(), req.did());
     String accessToken = jwtUtil.createAccessToken(user.userId());
     String refreshToken = jwtUtil.createRefreshToken(user.userId());
 

@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fcaf9859-916c-43e3-9cdb-c80febca3f82" name="Changes" comment="[BE]Test #12: 회원가입 기능 테스트&#10;&#10;- 회원가입 기능 테스트 코드 작성&#10;- 닉네임 유효성 검사 테스트 코드 수정">
+      <change beforePath="$PROJECT_DIR$/../auth/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/AuthApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/application/client/UserClient.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/application/client/UserClientImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/application/dto/request/UserInfoRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/application/dto/response/UserInfoResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/application/service/AuthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/domain/enums/UserRoleEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/domain/model/AuthenticatedUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/domain/model/UserSession.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/domain/repository/UserSessionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/global/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/global/dto/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/global/dto/PaginatedResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/infrastructure/JpaUserSessionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/infrastructure/security/JwtUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/infrastructure/security/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/main/java/marchtue/reuse/auth/presentation/AuthContoller.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../auth/src/test/java/marchtue/reuse/auth/AuthApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/UserApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/AccountInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/CheckUserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/NicknameCheckRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/UserAddInfoRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/UserCheckRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/UserInfoRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/request/WalletInfo.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/dto/response/UserInfoResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/application/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/enums/BankEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/enums/DidTypeEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/enums/EWalletPlatformEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/enums/EWalletTypeEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/enums/UserRoleEnum.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/model/Credential.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/model/RecentWord.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/model/UserRating.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/model/Wallet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/repository/CredentialRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/repository/RecentWordRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/repository/UserRatingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/domain/repository/WalletRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/exception/BusinessException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/exception/ErrorCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/common/BaseEntity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/common/BaseEntityNonUpdated.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/dto/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/dto/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/dto/PaginatedResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/util/BannedWordLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/util/NicknameFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/global/util/RequestUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/infrastructure/JpaCredentialRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/infrastructure/JpaRecentWordRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/infrastructure/JpaUserRatingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/infrastructure/JpaUserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/infrastructure/JpaWalletRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/presentation/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/marchtue/reuse/user/presentation/UserInternalController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/banned-words.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/marchtue/reuse/user/UserApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/marchtue/reuse/user/userServiceTest/CheckNicknameTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/marchtue/reuse/user/userServiceTest/RegisterUserTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="user" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="user" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="user" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Record" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="BE/feat/#20-auth-service-login" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="BE/feat/#24-category-1" />
+                    <option name="lastUsedInstant" value="1750675947" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="BE/feat/#20-auth-service-login" />
+                    <option name="lastUsedInstant" value="1750566481" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="BE/feat/#18-init-auth-service" />
+                    <option name="lastUsedInstant" value="1750492949" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="BE/feat/#12-user-service-setup" />
+                    <option name="lastUsedInstant" value="1750223803" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="ALL/docs/#10-proposal-update" />
+                    <option name="lastUsedInstant" value="1750221997" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$/.." />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="KubernetesApiProvider">{
+  &quot;contexts&quot;: [
+    {
+      &quot;name&quot;: &quot;docker-desktop&quot;
+    }
+  ],
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="KubernetesSettings">
+    <option name="contextName" value="docker-desktop" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2ydIV9Bh56sYGm5ZyfHDhZZPmW5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build user.executor": "Run",
+    "Gradle.RegisterUserTest.registerUser_duplicateNickname_throwsException.executor": "Run",
+    "Gradle.RegisterUserTest.successRegisterUser.executor": "Run",
+    "Gradle.UserServiceTest.failedWithBadWords.executor": "Run",
+    "Gradle.UserServiceTest.failedWithDuplicatedNickname.executor": "Run",
+    "Gradle.UserServiceTest.failedWithShort.executor": "Run",
+    "Gradle.UserServiceTest.failedWithShortOrBarcode.executor": "Run",
+    "Gradle.UserServiceTest.successWithValidNickname.executor": "Run",
+    "Gradle.user [bootJar].executor": "Run",
+    "Gradle.user [build].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "Spring Boot.UserApplication.executor": "Run",
+    "git-widget-placeholder": "BE/feat/#24-category-1",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.Java",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="marchtue.reuse.user.application.dto.request" />
+      <recent name="marchtue.reuse.user.domain.model" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="marchtue.reuse.user.application.dto.request" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.user [bootJar]">
+    <configuration name="RegisterUserTest.registerUser_duplicateNickname_throwsException" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;marchtue.reuse.user.userServiceTest.RegisterUserTest.registerUser_duplicateNickname_throwsException&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="RegisterUserTest.successRegisterUser" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;marchtue.reuse.user.userServiceTest.RegisterUserTest.successRegisterUser&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserServiceTest.failedWithDuplicatedNickname" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;marchtue.reuse.user.userServiceTest.UserServiceTest.failedWithDuplicatedNickname&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserServiceTest.successWithValidNickname" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;marchtue.reuse.user.userServiceTest.UserServiceTest.successWithValidNickname&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>true</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="user [bootJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="UserApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="user.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="marchtue.reuse.user.UserApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.user [bootJar]" />
+        <item itemvalue="Gradle.RegisterUserTest.registerUser_duplicateNickname_throwsException" />
+        <item itemvalue="Gradle.RegisterUserTest.successRegisterUser" />
+        <item itemvalue="Gradle.UserServiceTest.successWithValidNickname" />
+        <item itemvalue="Gradle.UserServiceTest.failedWithDuplicatedNickname" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fcaf9859-916c-43e3-9cdb-c80febca3f82" name="Changes" comment="" />
+      <created>1750158045437</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750158045437</updated>
+      <workItem from="1750158050078" duration="8447000" />
+      <workItem from="1750235821271" duration="28000" />
+      <workItem from="1750235851515" duration="30082000" />
+      <workItem from="1750400929623" duration="445000" />
+      <workItem from="1750492021898" duration="6587000" />
+      <workItem from="1750566354117" duration="5170000" />
+      <workItem from="1750661944593" duration="3174000" />
+      <workItem from="1750675546782" duration="1506000" />
+    </task>
+    <task id="LOCAL-00001" summary="[BE]Init #12: init user service">
+      <option name="closed" value="true" />
+      <created>1750223532854</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1750223532854</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[BE]Feat #12: User Domain, Repository&#10;&#10;- User schema 관련 도메인 작성&#10;- 관련 repository 작성">
+      <option name="closed" value="true" />
+      <created>1750239319798</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1750239319798</updated>
+    </task>
+    <task id="LOCAL-00003" summary="[BE]Feat #12: User Domain, Repository&#10;&#10;- User schema 관련 도메인 작성&#10;- 관련 repository 작성">
+      <option name="closed" value="true" />
+      <created>1750245634643</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1750245634643</updated>
+    </task>
+    <task id="LOCAL-00004" summary="[BE]Feat #12: 공통 응답 구현&#10;&#10;- ApiResponse&#10;- ErrorResponse&#10;- PaginatedResponse">
+      <option name="closed" value="true" />
+      <created>1750246726188</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1750246726188</updated>
+    </task>
+    <task id="LOCAL-00005" summary="[BE]Feat #12: 닉네임 유효성 검사 구현&#10;&#10;- 닉네임 유효성 검사 구현&#10;- jpa 매핑 수정&#10;- User OneToOne 단방향 매핑 수정">
+      <option name="closed" value="true" />
+      <created>1750303500840</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750303500840</updated>
+    </task>
+    <task id="LOCAL-00006" summary="  [BE]Test #12: 닉네임 유효성 검사 테스트&#10;&#10;- 닉네임 유효성 검사 테스트 코드 구현">
+      <option name="closed" value="true" />
+      <created>1750308540516</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750308540516</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[BE]Feat #12: 회원가입 기능 구현&#10;&#10;- 회원가입 기능 구현">
+      <option name="closed" value="true" />
+      <created>1750324957898</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750324957898</updated>
+    </task>
+    <task id="LOCAL-00008" summary="[BE]Test #12: 회원가입 기능 테스트&#10;&#10;- 회원가입 기능 테스트 코드 작성&#10;- 닉네임 유효성 검사 테스트 코드 수정">
+      <option name="closed" value="true" />
+      <created>1750326210156</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750326210156</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="[BE]Init #12: init user service" />
+    <MESSAGE value="[BE]Feat #12: User Domain, Repository&#10;&#10;- User schema 관련 도메인 작성&#10;- 관련 repository 작성" />
+    <MESSAGE value="[BE]Feat #12: 공통 응답 구현&#10;&#10;- ApiResponse&#10;- ErrorResponse&#10;- PaginatedResponse" />
+    <MESSAGE value="[BE]Feat #12: 닉네임 유효성 검사 구현&#10;&#10;- 닉네임 유효성 검사 구현&#10;- jpa 매핑 수정&#10;- User OneToOne 단방향 매핑 수정" />
+    <MESSAGE value="  [BE]Test #12: 닉네임 유효성 검사 테스트&#10;&#10;- 닉네임 유효성 검사 테스트 코드 구현" />
+    <MESSAGE value="[BE]Feat #12: 회원가입 기능 구현&#10;&#10;- 회원가입 기능 구현" />
+    <MESSAGE value="[BE]Test #12: 회원가입 기능 테스트&#10;&#10;- 회원가입 기능 테스트 코드 작성&#10;- 닉네임 유효성 검사 테스트 코드 수정" />
+    <option name="LAST_COMMIT_MESSAGE" value="[BE]Test #12: 회원가입 기능 테스트&#10;&#10;- 회원가입 기능 테스트 코드 작성&#10;- 닉네임 유효성 검사 테스트 코드 수정" />
+  </component>
+</project>

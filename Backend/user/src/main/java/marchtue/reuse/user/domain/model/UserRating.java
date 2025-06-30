@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import marchtue.reuse.user.global.common.BaseEntity;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
@@ -30,14 +29,16 @@ public class UserRating extends BaseEntity {
   @UuidGenerator
   private UUID id;
 
+  @Builder.Default
   private Long inProgressTrade = 0L;
 
+  @Builder.Default
   private Long completedTrade = 0L;
 
-  @ColumnDefault("0")
+  @Builder.Default
   private BigDecimal totalScore = BigDecimal.ZERO;
 
-  @ColumnDefault("0")
+  @Builder.Default
   private BigDecimal rateScore = BigDecimal.ZERO;
 
   @OneToOne(fetch = FetchType.LAZY)

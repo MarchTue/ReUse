@@ -3,6 +3,7 @@ package marchtue.reuse.auth.application.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import marchtue.reuse.auth.application.dto.request.DidCheckRequest;
 import marchtue.reuse.auth.application.dto.response.UserInfoResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +23,16 @@ public class UserClientImpl implements UserClient {
     request.put("ci_sh", ciSh);
 
     String url = "http://user-service:19091/internal/users/ci";
-    
+
     return restTemplate.postForObject(url, request, UserInfoResponse.class);
+  }
+
+  @Override
+  public void DidCheckDid(String userId, String did) {
+    DidCheckRequest request = new DidCheckRequest(userId, did);
+
+    String url = "http://user-service:19091/internal/users/did";
+
+    restTemplate.postForLocation(url, request);
   }
 }

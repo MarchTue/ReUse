@@ -1,6 +1,5 @@
 package marchtue.reuse.user.global.util;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,8 +18,16 @@ public class RequestUtil {
       return null;
     }
 
-    HttpServletRequest req = attributes.getRequest();
-    return UUID.fromString(req.getHeader("X-User-Id"));
+    String id = attributes.getRequest().getHeader("X-user-Id");
+    if (id == null || id.isBlank()) {
+      return null;
+    }
+
+    try {
+      return UUID.fromString(id);
+    } catch (IllegalArgumentException e) {
+      return null;
+    }
   }
 
 }

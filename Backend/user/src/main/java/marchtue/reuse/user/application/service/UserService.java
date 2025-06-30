@@ -58,6 +58,7 @@ public class UserService {
   }
 
   // 회원유무확인
+  @Transactional
   public ApiResponse checkUser(CheckUserRequest req) {
     // ci_hs 가 일치하는 회원 찾기
     User user = userRepository.findByCiHs(req.ci_hs());
@@ -65,18 +66,6 @@ public class UserService {
     // 없다면 회원가입 추가정보 요청 응답
     if (user == null) {
       return new ApiResponse(404, "user not found", "");
-    }
-
-    // 있고, 새로운 did면 추가
-    if (credentialRepository.findByDid(req.did())) {
-      Credential credential = Credential.create(req.did(), user);
-      credentialRepository.save(credential);
-
-      // 로그인 요청 (추가필요)
-    } else {
-      // 있고, 기존의 did면 로그인 처리
-      // 로그인 요청 (추가필요)
-      return null;
     }
     return null;
   }
@@ -96,6 +85,7 @@ public class UserService {
         req.phone(),
         req.nickname(),
         req.profileImage());
+    user.setCreatedBy(user.getId());
     User savedUser = userRepository.save(user);
 
     if (req.accountInfo().bank() != null) {
@@ -118,6 +108,18 @@ public class UserService {
 
   }
 
+
+  // did check
+  public void checkDid(String userId, String did) {
+    UUID userUuId = UUID.fromString(userId);
+    User user = findById(userUuId);
+    if (credentialRepository.findByDid(did) == null) {
+      Credential credential = Credential.create(did, user);
+      credentialRepository.save(credential);
+
+    }
+  }
+
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
   }
@@ -125,5 +127,10 @@ public class UserService {
 
   public User findByCi(String ciHs) {
     return userRepository.findByCiHs(ciHs);
+  }
+
+  public User findById(UUID userId) {
+    return userRepository.findById(userId)
+        .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
   }
 }

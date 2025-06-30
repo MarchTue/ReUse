@@ -38,7 +38,17 @@ public abstract class BaseEntityNonUpdated {
   @PrePersist
   public void createBase() {
     this.createdAt = LocalDateTime.now();
-    this.createdBy = RequestUtil.getCurrentUserId();
+    
+    if (this.createdBy == null) {
+      UUID userId = RequestUtil.getCurrentUserId();
+      if (userId != null) {
+        this.createdBy = userId;
+      }
+    }
+  }
+
+  public void setCreatedBy(UUID userId) {
+    this.createdBy = userId;
   }
 
   public void deleteBase() {

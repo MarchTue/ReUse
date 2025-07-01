@@ -7,7 +7,7 @@ import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
-import marchtue.reuse.user.global.util.RequestUtil;
+import marchtue.reuse.trade.global.util.RequestUtil;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

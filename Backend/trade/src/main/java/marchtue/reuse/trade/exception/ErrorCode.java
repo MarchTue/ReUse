@@ -5,9 +5,10 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-  INVALID_NICKNAME(400, "invalid nickname"),
-  BADWORD_NICKNAME(400, "bad word nickname"),
-  DUPLICATED_NICKNAME(400, "duplicated nickname");
+  FORBIDDEN(403, "forbidden"),
+  NO_ROLE(400, "theres no role"),
+  Duplicated(400, "already exist"),
+  NOT_FOUND(404, "not found");
 
 
   private final int code;

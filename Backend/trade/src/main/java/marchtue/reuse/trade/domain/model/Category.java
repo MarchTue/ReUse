@@ -30,4 +30,17 @@ public class Category {
 
   private String name;
 
+
+  public static Category create(String name) {
+    return Category.builder()
+        .isActive(true)
+        .name(name)
+        .build();
+  }
+
+  public Category update(String name, boolean isActive) {
+    this.name = name;
+    this.isActive = isActive;
+    return this;
+  }
 }

@@ -79,6 +79,11 @@ public class UserService {
       throw new BusinessException(ErrorCode.DUPLICATED_NICKNAME);
     }
 
+    // Hs unique
+    if (findByCi(req.ci_hs()) != null) {
+      throw new BusinessException(ErrorCode.EXIST_USER);
+    }
+
     User user = User.create(
         req.ci_hs(),
         req.name(),

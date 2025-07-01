@@ -2,7 +2,7 @@ package marchtue.reuse.trade.exception;
 
 import java.util.HashMap;
 import java.util.Map;
-import marchtue.reuse.user.global.dto.ErrorResponse;
+import marchtue.reuse.trade.global.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;

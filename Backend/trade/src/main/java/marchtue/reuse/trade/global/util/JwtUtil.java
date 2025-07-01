@@ -1,19 +1,20 @@
-package marchtue.reuse.auth.infrastructure.security;
+package marchtue.reuse.trade.global.util;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
-import java.util.Date;
-import marchtue.reuse.auth.domain.enums.UserRoleEnum;
+import marchtue.reuse.trade.domain.enums.UserRoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -38,43 +39,6 @@ public class JwtUtil {
   public void init() {
     byte[] bytes = Base64.getDecoder().decode(secretKey);
     key = Keys.hmacShaKeyFor(bytes);
-  }
-
-  public String createAccessToken(String username, UserRoleEnum role) {
-    Date now = new Date();
-    Date expireDate = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION);
-    return Jwts.builder()
-        .setSubject(username)
-        .claim("role", role.name()) // role을 문자열로 저장
-        .setExpiration(expireDate)
-        .signWith(key, SignatureAlgorithm.HS256)
-        .compact();
-  }
-
-  public String createRefreshToken(String username) {
-    Date now = new Date();
-    Date expireDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION);
-    return Jwts.builder()
-        .setSubject(username)
-        .setIssuedAt(now)
-        .setExpiration(expireDate)
-        .signWith(key, SignatureAlgorithm.HS256)
-        .compact();
-  }
-
-  public HttpHeaders createAccessTokenHeader(String accessToken) {
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(AUTHORIZATION_HEADER, BEARER_PREFIX + accessToken);
-    return headers;
-  }
-
-  public ResponseCookie createRefreshTokenCookie(String refreshToken) {
-    return ResponseCookie.from("Refresh-Token", refreshToken)
-        .httpOnly(true)
-        .secure(true)
-        .path("/")
-        .maxAge(3 * 24 * 60 * 60)
-        .build();
   }
 
   public boolean validateToken(String token) {
@@ -118,5 +82,12 @@ public class JwtUtil {
         .build()
         .parseClaimsJws(token)
         .getBody();
+  }
+
+  
+  public UserRoleEnum getUserRole(String token) {
+    Claims claims = getUserInfoFromToken(token);
+    String role = claims.get("role", String.class);
+    return UserRoleEnum.valueOf(role);
   }
 }

@@ -5,6 +5,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import nextClient from "@/utils/nextApiClient";
 
+interface RaonAuthResponse {
+  success: boolean;
+  message: string;
+  redirectPath: string;
+  userExists: boolean;
+}
+
 export default function VerificationPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -71,34 +78,16 @@ export default function VerificationPage() {
               let parsed;
               try {
                 parsed = JSON.parse(res);
-
-                const parsedToken = await nextClient.postNext(
-                  '/auth/raonParse',
+                // 유저 확인
+                const checkedData = await nextClient.postNext<{ token: string; }, RaonAuthResponse>(
+                  'frontend/auth/verify',
                   { token: parsed.token }
                 );
-
-                const ciValue = parsedToken.data.ci;
-
-                if (!ciValue) {
-                  console.error("RAON 인증 응답에서 CI 값을 찾을 수 없습니다:", parsed);
-                  alert("인증에 실패했습니다. (CI 값 없음)");
-                  return reject(new Error("CI value not found in authentication response."));
-                }
-                const nextResponse = await nextClient.postNext(
-                  '/auth/hashCi',
-                  { ciValue: ciValue } // CI 값을 요청 본문에 포함
-                );
-                // 백엔드 검증 혹은 유저 확인
-                const hashedCi = nextResponse.data.hashedCi;
-
                 // 검사 결과에 따른 다음 리디렉션
-
-                // 인증 및 해싱 성공 후 리디렉션
-                // router.push("/auth/result");
+                router.push(checkedData.data.redirectPath);
                 resolve();
               } catch (parseError) {
                 console.error("RAON 응답 파싱 오류 또는 CI 해싱 API 호출 오류:", parseError);
-                alert("인증 처리 중 오류가 발생했습니다.");
                 reject(parseError);
               }
             },

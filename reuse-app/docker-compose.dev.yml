@@ -1,0 +1,29 @@
+services:
+  redis:
+    image: redis:7.4-alpine
+    container_name: dev-front-redis-server
+    ports:
+      - "36379:36379"
+    volumes:
+      - ./redis-data:/data
+    command: redis-server --appendonly yes
+    
+  nextjs_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: dev-nextjs-app
+    ports:
+      - "30001:30001"
+      - "35729:35729"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    env_file:
+      - ./.env.docker
+    depends_on:
+      - redis

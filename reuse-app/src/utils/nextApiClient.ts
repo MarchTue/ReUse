@@ -1,7 +1,6 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 const NEXT_API_BASE_URL = process.env.NEXT_PUBLIC_NEXT_API_BASE_URL;
-
 
 class NextApiClient {
   private nextApi: AxiosInstance;

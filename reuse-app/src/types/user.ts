@@ -1,0 +1,107 @@
+export enum BankEnum {
+  KAKAO_BANK,
+  TOSS_BANK,
+  KB_BANK,
+  SHINHAN_BANK,
+  HANA_BANK,
+  WOORI_BANK,
+  NH_BANK,
+  IBK_BANK,
+  K_BANK,
+  CITY_BANK,
+  SC_BANK,
+  DGB_BANK,
+  BNK_BUSAN,
+  BNK_KYONGNAM,
+  JEONBUK_BANK,
+  JEJU_BANK,
+  SH_BANK,
+}
+
+export enum DidTypeEnum {
+  RESIDENT,
+  DRIVER,
+}
+
+export enum WalletTypeEnum {
+  KAKAOPAY,
+  TOSSPAY,
+  NAVERPAY,
+  PAYCO,
+  SAMSUNGPAY,
+  APPLEPAY,
+  GOOGLEPAY,
+}
+
+export enum walletPlatformEnum {
+  KAKAOPAY,
+  TOSSPAY,
+  NAVERPAY,
+  PAYCO,
+  SAMSUNGPAY,
+  APPLEPAY,
+  GOOGLEPAY,
+}
+
+export interface WalletInfoType {
+  address: string | null;
+  type: WalletTypeEnum | null,
+  platform: WalletPlatformEnum | null;
+}
+
+export interface AccountInfoType {
+  bank: BankEnum | null,
+  account: string | null; // - 처리 고민중, 복붙 고려해서 일단 string
+}
+
+// RaonData 에서 가져올 수 있는 사용자 회원가입에 필요한 정보
+export interface DefaultSignupDataType {
+  ci_hs: string;
+  did: string;
+  did_type: DidTypeEnum;
+  name: string;
+  phone: string;
+}
+
+export interface AdditionalSignupDataType {
+  nickname: string;
+  profileImage: string | null;
+  accountInfo: AccountInfoType,
+  walletInfo: WalletInfoType;
+}
+
+export interface SignupDataType extends DefaultSignupDataType, AdditionalSignupDataType { }
+
+
+export interface RaonData {
+  address: string;
+  ci: string;
+  sex: string | null;
+  engsex: string | null;
+  birth: string;
+  title: string | null;
+  telno: string;
+  userDid: string;
+  uncommitted: unknown;
+  ihidnum: string;
+  issuanceDate: string | Date;
+  foreignflag: string | null;
+  vcTypeCodeList: unknown;
+  issuerDid: string;
+  name: string;
+  issude: string;
+  issuernm: string | null;
+  vcId: string;
+  expirationDate: string | Date;
+  provider: string;
+  locpanm: string | null;
+  inorgdonnyn: string | null;
+  engnm: string | null;
+  lcnscndcdnm: string | null;
+  dlno: string | null;
+  engaddr: string | null;
+  asort: string | null;
+  passwordsn: string | null;
+  inspctbegend: string | null;
+  engbirth: string | null;
+}

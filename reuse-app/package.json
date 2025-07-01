@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "docker-dev": "WATCHPACK_POLLING=true  next dev -H 0.0.0.0 -p 30001",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -27,6 +28,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "ioredis": "^5.6.1",
     "lucide-react": "^0.518.0",
     "next": "15.3.4",
     "next-pwa": "^5.6.0",
@@ -37,6 +39,7 @@
     "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.1.0",
     "workbox-webpack-plugin": "^7.3.0",
     "zod": "^3.25.67",
     "zustand": "^5.0.5"

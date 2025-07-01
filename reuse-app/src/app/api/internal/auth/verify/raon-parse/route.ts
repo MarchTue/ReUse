@@ -25,7 +25,6 @@ export async function POST(req: NextRequest) { // 변경지점 1: 모든 로직�
     }
   } else {
     console.error("환경 변수 HASH_SALT_ROUNDS가 설정되지 않았습니다.");
-    // 변경지점 3: return 문이 POST 함수 내부로 이동
     return NextResponse.json(
       { message: "Internal server error: HASH_SALT_ROUNDS is not set." },
       { status: 500 }
@@ -34,7 +33,6 @@ export async function POST(req: NextRequest) { // 변경지점 1: 모든 로직�
 
   if (!RAON_API_URL) {
     console.error("환경 변수 RAON_API_URL이 설정되지 않았습니다.");
-    // 변경지점 4: return 문이 POST 함수 내부로 이동
     return NextResponse.json(
       { message: "Internal server error: RAON_API_URL is not properly set." },
       { status: 500 }
@@ -42,20 +40,19 @@ export async function POST(req: NextRequest) { // 변경지점 1: 모든 로직�
   }
 
   try {
-    const { token } = await req.json(); // verify/route.ts에서 전달받은 RAON 토큰
+    const { token } = await req.json(); 
 
     if (!token || typeof token !== 'string') {
       return NextResponse.json({ message: 'Token is required for RAON processing.' }, { status: 400 });
     }
 
-    // 1. RAON 외부 API 호출하여 토큰 파싱 및 CI 값 추출
     const raonResponse = await axios.post(
       RAON_API_URL + 'token',
       { token }
     );
 
     const ciValue = raonResponse.data?.data?.ci;
-    const parsedRaonData = raonResponse.data?.data; // RAON 인증에서 얻은 추가 데이터
+    const parsedRaonData = raonResponse.data?.data;
 
     if (!ciValue || typeof ciValue !== 'string') {
       console.error("RAON 인증 응답에서 유효한 CI 값을 찾을 수 없습니다:", raonResponse.data);

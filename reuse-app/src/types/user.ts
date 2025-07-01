@@ -33,7 +33,7 @@ export enum WalletTypeEnum {
   GOOGLEPAY,
 }
 
-export enum walletPlatformEnum {
+export enum WalletPlatformEnum {
   KAKAOPAY,
   TOSSPAY,
   NAVERPAY,

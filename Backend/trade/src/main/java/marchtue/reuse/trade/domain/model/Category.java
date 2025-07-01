@@ -37,4 +37,10 @@ public class Category {
         .name(name)
         .build();
   }
+
+  public Category update(String name, boolean isActive) {
+    this.name = name;
+    this.isActive = isActive;
+    return this;
+  }
 }

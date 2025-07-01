@@ -5,8 +5,10 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-  FORBIDDEN(403, "fobidden"),
-  NO_ROLE(400, "theres no role");
+  FORBIDDEN(403, "forbidden"),
+  NO_ROLE(400, "theres no role"),
+  Duplicated(400, "already exist"),
+  NOT_FOUND(404, "not found");
 
 
   private final int code;

@@ -14,4 +14,6 @@ public interface CategoryRepository {
   Category findByName(String name);
 
   Optional<Category> findById(UUID id);
+
+  void delete(Category category);
 }

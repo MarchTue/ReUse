@@ -9,6 +9,7 @@ import marchtue.reuse.trade.application.dto.request.AddCategoryRequest;
 import marchtue.reuse.trade.application.dto.request.PatchCategoryRequest;
 import marchtue.reuse.trade.application.service.CategoryService;
 import marchtue.reuse.trade.global.dto.ApiResponse;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,5 +48,13 @@ public class CategoryController {
       HttpServletRequest request
   ) {
     return categoryService.patchCategory(categoryId, req, request);
+  }
+
+  @DeleteMapping("{categoryId}")
+  public ApiResponse deleteCategory(
+      @PathVariable UUID categoryId,
+      HttpServletRequest request
+  ) {
+    return categoryService.deleteCategory(categoryId, request);
   }
 }

@@ -26,10 +26,7 @@ public class CategoryService {
 
   public ApiResponse addCategory(AddCategoryRequest req, HttpServletRequest request) {
     UserRoleEnum role = checkUserRole(request);
-
-    if (role == UserRoleEnum.ROLE_USER) {
-      throw new BusinessException(ErrorCode.FORBIDDEN);
-    }
+    isAdminCheck(role);
 
     // 중복확인
     if (findByName(req.name()) != null) {
@@ -60,14 +57,13 @@ public class CategoryService {
   // 카테고리 수정
   public ApiResponse patchCategory(UUID categoryId, PatchCategoryRequest req,
       HttpServletRequest request) {
-
     UserRoleEnum role = checkUserRole(request);
-
-    if (role == UserRoleEnum.ROLE_USER) {
-      throw new BusinessException(ErrorCode.FORBIDDEN);
-    }
+    isAdminCheck(role);
 
     Category category = findById(categoryId);
+    if (findByName(req.name()) != null) {
+      throw new BusinessException(ErrorCode.Duplicated);
+    }
     Category updatedCategory = category.update(req.name(), req.isActive());
     categoryRepository.save(updatedCategory);
 
@@ -75,6 +71,17 @@ public class CategoryService {
 
   }
 
+  // 카테고리 삭제
+  public ApiResponse deleteCategory(UUID categoryId, HttpServletRequest request) {
+    UserRoleEnum role = checkUserRole(request);
+    isAdminCheck(role);
+
+    Category category = findById(categoryId);
+    categoryRepository.delete(category);
+
+    return new ApiResponse(200, "succeeded", null);
+
+  }
 
   private UserRoleEnum checkUserRole(HttpServletRequest request) {
     String token = jwtUtil.getTokenFromHeader(request, JwtUtil.AUTHORIZATION_HEADER);
@@ -84,6 +91,13 @@ public class CategoryService {
 
     return jwtUtil.getUserRole(token);
 
+  }
+
+  private boolean isAdminCheck(UserRoleEnum role) {
+    if (role == UserRoleEnum.ROLE_USER) {
+      throw new BusinessException(ErrorCode.FORBIDDEN);
+    }
+    return false;
   }
 
   private Category findByName(String name) {

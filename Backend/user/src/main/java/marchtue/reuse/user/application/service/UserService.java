@@ -8,8 +8,10 @@ import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
 import marchtue.reuse.user.domain.model.Credential;
 import marchtue.reuse.user.domain.model.User;
+import marchtue.reuse.user.domain.model.UserRating;
 import marchtue.reuse.user.domain.model.Wallet;
 import marchtue.reuse.user.domain.repository.CredentialRepository;
+import marchtue.reuse.user.domain.repository.UserRatingRepository;
 import marchtue.reuse.user.domain.repository.UserRepository;
 import marchtue.reuse.user.domain.repository.WalletRepository;
 import marchtue.reuse.user.exception.BusinessException;
@@ -26,6 +28,7 @@ public class UserService {
   private final UserRepository userRepository;
   private final CredentialRepository credentialRepository;
   private final WalletRepository walletRepository;
+  private final UserRatingRepository userRatingRepository;
 
   public ApiResponse checkNickname(NicknameCheckRequest req) {
     String nickname = req.nickname();
@@ -106,6 +109,9 @@ public class UserService {
           savedUser);
       walletRepository.save(wallet);
     }
+    // 레이팅 정보 생성
+    UserRating rating = UserRating.create(savedUser);
+    userRatingRepository.save(rating);
 
     Map<String, UUID> response = Map.of("user_id", savedUser.getId());
 

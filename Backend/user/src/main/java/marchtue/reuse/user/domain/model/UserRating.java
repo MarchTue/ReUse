@@ -49,13 +49,15 @@ public class UserRating extends BaseEntity {
   public static UserRating create(
       User user
   ) {
-    return UserRating.builder()
+    UserRating rating = UserRating.builder()
         .inProgressTrade(0L)
         .completedTrade(0L)
         .totalScore(BigDecimal.ZERO)
         .rateScore(BigDecimal.ZERO)
         .user(user)
         .build();
+    rating.setCreatedBy(user.getId());
+    return rating;
   }
 
 }

@@ -45,4 +45,19 @@ public class UserRating extends BaseEntity {
   @JoinColumn(name = "user_id")
   private User user;
 
+
+  public static UserRating create(
+      User user
+  ) {
+    UserRating rating = UserRating.builder()
+        .inProgressTrade(0L)
+        .completedTrade(0L)
+        .totalScore(BigDecimal.ZERO)
+        .rateScore(BigDecimal.ZERO)
+        .user(user)
+        .build();
+    rating.setCreatedBy(user.getId());
+    return rating;
+  }
+
 }

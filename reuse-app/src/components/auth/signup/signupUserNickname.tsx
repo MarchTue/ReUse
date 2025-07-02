@@ -1,16 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/customInput";
-import { AdditionalSignupDataType } from "@/types/user";
+import { SignupStepProps } from "@/types/signup.props";
 import Image from "next/image";
 import React, { useCallback, useEffect, useState } from "react";
 
-interface SignupUserNicknameProps {
-  onNextStep: (data: { nickname: string; profileImage: string | null; }) => void;
-  initialData: Partial<AdditionalSignupDataType>;
 
-}
 
-export default function SignupUserNickname({ onNextStep, initialData }: SignupUserNicknameProps) {
+export default function SignupUserNickname({ goNextStep, initialData, handlePrevStep }: SignupStepProps) {
 
   const [nickname, setNickname] = useState(initialData.nickname || "");
   const [imageUrl, setImageUrl] = useState<string | null>(initialData.profileImage || null);
@@ -85,7 +81,7 @@ export default function SignupUserNickname({ onNextStep, initialData }: SignupUs
       return;
     }
 
-    onNextStep({ nickname, profileImage: imageUrl });
+    goNextStep({ nickname, profileImage: imageUrl });
   };
 
   return (

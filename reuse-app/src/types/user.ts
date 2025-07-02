@@ -77,11 +77,6 @@ export interface AdditionalSignupDataType {
 
 export interface SignupDataType extends DefaultSignupDataType, AdditionalSignupDataType { }
 
-export interface SignupStepProps {
-  initialData: Partial<AdditionalSignupDataType>;
-  goNextStep: (data: Partial<AdditionalSignupDataType>) => void;
-  handlePrevStep?: () => void;
-}
 
 export interface TermsAgreementData {
   service: boolean;

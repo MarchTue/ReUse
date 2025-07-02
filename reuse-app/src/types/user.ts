@@ -66,11 +66,29 @@ export interface DefaultSignupDataType {
 export interface AdditionalSignupDataType {
   nickname: string;
   profileImage: string | null;
-  accountInfo: AccountInfoType,
-  walletInfo: WalletInfoType;
+  accountInfo?: AccountInfoType,
+  walletInfo?: WalletInfoType;
+  termsAgreements?: {
+    service: boolean;
+    privacy: boolean;
+    marketing: boolean;
+  };
 }
 
 export interface SignupDataType extends DefaultSignupDataType, AdditionalSignupDataType { }
+
+export interface SignupStepProps {
+  initialData: Partial<AdditionalSignupDataType>;
+  goNextStep: (data: Partial<AdditionalSignupDataType>) => void;
+  handlePrevStep?: () => void;
+}
+
+export interface TermsAgreementData {
+  service: boolean;
+  privacy: boolean;
+  marketing: boolean;
+}
+
 
 
 export interface RaonData {

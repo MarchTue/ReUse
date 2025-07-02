@@ -1,11 +1,14 @@
 package marchtue.reuse.user.application.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
+import marchtue.reuse.user.application.dto.response.MypageResponse;
+import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.domain.model.Credential;
 import marchtue.reuse.user.domain.model.User;
 import marchtue.reuse.user.domain.model.UserRating;
@@ -17,6 +20,7 @@ import marchtue.reuse.user.domain.repository.WalletRepository;
 import marchtue.reuse.user.exception.BusinessException;
 import marchtue.reuse.user.exception.ErrorCode;
 import marchtue.reuse.user.global.dto.ApiResponse;
+import marchtue.reuse.user.global.util.JwtUtil;
 import marchtue.reuse.user.global.util.NicknameFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,7 @@ public class UserService {
   private final CredentialRepository credentialRepository;
   private final WalletRepository walletRepository;
   private final UserRatingRepository userRatingRepository;
+  private final JwtUtil jwtUtil;
 
   public ApiResponse checkNickname(NicknameCheckRequest req) {
     String nickname = req.nickname();
@@ -131,6 +136,28 @@ public class UserService {
     }
   }
 
+  public ApiResponse myPage(HttpServletRequest request, UUID userId) throws BusinessException {
+    UUID targetUserId = getUserInfoFromToken(request);
+    if (!userId.equals(targetUserId)) {
+      if (checkUserRole(request) == UserRoleEnum.ROLE_USER) {
+        throw new BusinessException(ErrorCode.FORBIDDEN);
+      }
+    }
+    User user = findById(userId);
+    UserRating rating = getUserRating(user);
+    MypageResponse res = new MypageResponse(
+        user.getNickname(),
+        rating.getInProgressTrade(),
+        rating.getCompletedTrade(),
+        user.getToken(),
+        rating.getRateScore(),
+        user.getBank().getKoreanName(),
+        user.getAccount(),
+        user.getPhoneNumber()
+    );
+    return new ApiResponse(200, "succceded", res);
+  }
+
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
   }
@@ -144,4 +171,28 @@ public class UserService {
     return userRepository.findById(userId)
         .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
   }
+
+  private UserRating getUserRating(User user) {
+    return userRatingRepository.findByUserId(user.getId());
+  }
+
+  private UUID getUserInfoFromToken(HttpServletRequest request) {
+    String token = jwtUtil.getTokenFromHeader(request, jwtUtil.AUTHORIZATION_HEADER);
+    if (token == null || !jwtUtil.validateToken(token)) {
+      throw new BusinessException(ErrorCode.NO_ROLE);
+    }
+    return UUID.fromString(jwtUtil.getUserInfoFromToken(token).getSubject());
+  }
+
+  private UserRoleEnum checkUserRole(HttpServletRequest request) {
+    String token = jwtUtil.getTokenFromHeader(request, JwtUtil.AUTHORIZATION_HEADER);
+    if (token == null || !jwtUtil.validateToken(token)) {
+      throw new BusinessException(ErrorCode.NO_ROLE);
+    }
+
+    return jwtUtil.getUserRole(token);
+
+  }
+
+
 }

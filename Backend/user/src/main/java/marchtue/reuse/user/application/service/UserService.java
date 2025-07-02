@@ -11,9 +11,11 @@ import marchtue.reuse.user.application.dto.response.MypageResponse;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.domain.model.Credential;
 import marchtue.reuse.user.domain.model.User;
+import marchtue.reuse.user.domain.model.UserCategory;
 import marchtue.reuse.user.domain.model.UserRating;
 import marchtue.reuse.user.domain.model.Wallet;
 import marchtue.reuse.user.domain.repository.CredentialRepository;
+import marchtue.reuse.user.domain.repository.UserCategoryRepository;
 import marchtue.reuse.user.domain.repository.UserRatingRepository;
 import marchtue.reuse.user.domain.repository.UserRepository;
 import marchtue.reuse.user.domain.repository.WalletRepository;
@@ -33,6 +35,7 @@ public class UserService {
   private final CredentialRepository credentialRepository;
   private final WalletRepository walletRepository;
   private final UserRatingRepository userRatingRepository;
+  private final UserCategoryRepository userCategoryRepository;
   private final JwtUtil jwtUtil;
 
   public ApiResponse checkNickname(NicknameCheckRequest req) {
@@ -156,6 +159,20 @@ public class UserService {
         user.getPhoneNumber()
     );
     return new ApiResponse(200, "succceded", res);
+  }
+
+  public ApiResponse favCategory(UUID categoryId, HttpServletRequest request) {
+    UUID userId = getUserInfoFromToken(request);
+    UserCategory category = userCategoryRepository.findByUserIdAndCategoryId(userId, categoryId)
+        .orElse(null);
+    if (category == null) {
+      UserCategory favCate = UserCategory.create(userId, categoryId);
+      userCategoryRepository.save(favCate);
+    } else {
+      userCategoryRepository.delete(category);
+    }
+
+    return new ApiResponse(200, "succeeded", null);
   }
 
   private User findByNickname(String nickname) {

@@ -42,11 +42,19 @@ public class UserController {
     return userService.registerUser(req);
   }
 
-  @GetMapping("/me/{user_id}")
+  @GetMapping("/me/{userId}")
   public ApiResponse myPage(
       HttpServletRequest request,
-      @PathVariable("user_id") UUID userId
+      @PathVariable UUID userId
   ) {
     return userService.myPage(request, userId);
+  }
+
+  @GetMapping("/category/{categoryId}")
+  public ApiResponse favCategory(
+      @PathVariable UUID categoryId,
+      HttpServletRequest request
+  ) {
+    return userService.favCategory(categoryId, request);
   }
 }

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import SignupTerms from './signupTerms';
 import { useRouter } from 'next/navigation';
 import SignupAccountSelection from './signupAccountSelection';
+import nextClient from '@/utils/nextApiClient';
 
 interface SignupClientComponentProps {
   initialKey: string;
@@ -15,6 +16,7 @@ interface SignupClientComponentProps {
 export default function SignupClientComponent({ initialKey }: SignupClientComponentProps) {
   const router = useRouter();
   // 0 약관   // 1 닉네임 + 프로필  // 2 은행 선택
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -47,22 +49,56 @@ export default function SignupClientComponent({ initialKey }: SignupClientCompon
 
   });
 
+
+  const handleSubmitSignup = useCallback(async (finalData: AdditionalSignupDataType) => {
+    if (isSubmit) return;
+
+    setIsSubmit(true);
+    try {
+      const res = await nextClient.postNext(
+        'frontend/auth/signup',
+        {
+          finalData,
+          initialKey
+        }
+      );
+      if (res.status === 200) {
+        router.push('/home');
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmit(false);
+    }
+
+  }, [initialKey, isSubmit]);
+
   const goNextStep = useCallback((data: Partial<AdditionalSignupDataType>) => {
-    setSignupData((prev) => ({ ...prev, ...data }));
+    let currentSignupData = signupData;
+    setSignupData((prev) => {
+      const updatedData = { ...prev, ...data };
+      currentSignupData = updatedData;
+      return updatedData;
+    });
+
     setCurrentStep((cur) => {
       const newStep = cur + 1;
       const totalSteps = 3; // 약관, 닉네임, 계좌설정 + 성공 페이지
-      if (newStep <= totalSteps) { // 마지막 단계까지만 history.pushState
+      if (newStep < totalSteps) { // 마지막 단계까지만 history.pushState
         router.push(`#step${newStep}`, { scroll: false });
+      } else if (newStep === 3) {
+        handleSubmitSignup(currentSignupData as AdditionalSignupDataType);
       }
       return newStep;
     });
 
-  }, [signupData, router]); // signupData, router - 최신 상태 반영
+  }, [handleSubmitSignup, signupData, router]); // signupData, router - 최신 상태 반영
 
   const handlePrevStep = useCallback(() => {
     router.back();
   }, [router]);
+
+
 
   useEffect(() => {
     const handlePopState = (e: PopStateEvent) => {
@@ -170,3 +206,4 @@ export default function SignupClientComponent({ initialKey }: SignupClientCompon
     </div>
   );
 }
+

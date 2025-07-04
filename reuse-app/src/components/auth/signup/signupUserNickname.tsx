@@ -65,7 +65,7 @@ export default function SignupUserNickname({ goNextStep, initialData, handlePrev
     e.preventDefault();
     // 닉네임 검사 프론트 로직 실행 및 닉네임 검사 백엔드 로직 실행
     // 프론트 : 공백 검사, 글자수 검사
-    // 백엔드 호출 로직 필요
+    // 백엔드 호출 로직 필요 tqh 
     const clientError = validateNickname(nickname);
     if (clientError) {
       setNicknameError(clientError);
@@ -86,7 +86,7 @@ export default function SignupUserNickname({ goNextStep, initialData, handlePrev
 
   return (
     <>
-      {/* 프로필 이미지 추가는 나중에 */}
+      {/* 프로필 이미지 추가는 나중에 tqh */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="flex justify-center items-center h-32 w-32 rounded-full bg-gray-200 mx-auto mb-6 relative ">
           {imageUrl ? (
@@ -153,6 +153,4 @@ export default function SignupUserNickname({ goNextStep, initialData, handlePrev
         </Button>
       </form >
     </>);
-
-
 }

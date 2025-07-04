@@ -130,7 +130,7 @@ export default function SignupAccountSelection({ goNextStep, initialData }: Sign
         disabled={!isFormValid}
         onClick={handleNext}
       >
-        다음으로
+        회원 가입
       </Button>
     </div>);
 }

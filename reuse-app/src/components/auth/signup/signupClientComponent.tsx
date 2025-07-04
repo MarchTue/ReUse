@@ -6,6 +6,7 @@ import { AdditionalSignupDataType } from '@/types/user';
 import { Button } from '@/components/ui/button';
 import SignupTerms from './signupTerms';
 import { useRouter } from 'next/navigation';
+import SignupAccountSelection from './signupAccountSelection';
 
 interface SignupClientComponentProps {
   initialKey: string;
@@ -52,13 +53,11 @@ export default function SignupClientComponent({ initialKey }: SignupClientCompon
       const newStep = cur + 1;
       const totalSteps = 3; // 약관, 닉네임, 계좌설정 + 성공 페이지
       if (newStep <= totalSteps) { // 마지막 단계까지만 history.pushState
-        router.push(`#step${newStep}`);
+        router.push(`#step${newStep}`, { scroll: false });
       }
       return newStep;
     });
 
-    // debug
-    console.log("Updated signupData:", { ...signupData, ...data });
   }, [signupData, router]); // signupData, router - 최신 상태 반영
 
   const handlePrevStep = useCallback(() => {
@@ -67,28 +66,24 @@ export default function SignupClientComponent({ initialKey }: SignupClientCompon
 
   useEffect(() => {
     const handlePopState = (e: PopStateEvent) => {
-
-      const state = e.state as { step?: number; };
-      if (state && typeof state.step === 'number') {
-        setCurrentStep(state.step);
+      const hashStep = parseInt(window.location.hash.replace('#step', ''));
+      const totalSteps = 3;
+      if (!isNaN(hashStep) && hashStep >= 0 && hashStep < totalSteps) {
+        setCurrentStep(hashStep);
       } else {
         setCurrentStep(0);
       }
     };
     window.addEventListener('popstate', handlePopState);
 
-    if (typeof window !== 'undefined') {
-      router.replace(`#step${currentStep}`);
+    if (router && typeof window !== 'undefined') {
+      router.replace(`#step${currentStep}`, { scroll: false });
     }
 
-    if (router && typeof window !== 'undefined') {
-      router.replace(`#step${currentStep}`);
-    }
-    
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, []);
+  }, [router]);
 
 
   const renderStepIndicator = () => {
@@ -157,11 +152,11 @@ export default function SignupClientComponent({ initialKey }: SignupClientCompon
           />
         )}
         {currentStep === 2 && (
-          // <SignupAccountSelection 
-          //   goNextStep={goNextStep} 
-          //   initialData={signupData.accountInfo || { bank: null, account: null }} 
-          // />
-          <></>
+          <SignupAccountSelection
+            goNextStep={goNextStep}
+            initialData={signupData}
+            handlePrevStep={handlePrevStep}
+          />
         )}
         {/* currentStep 3은 회원가입 완료/성공 페이지 */}
         {currentStep === 3 && (

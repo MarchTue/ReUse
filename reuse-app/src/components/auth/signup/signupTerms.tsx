@@ -4,18 +4,18 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { SignupStepProps } from "@/types/signup.props";
-import { TermsAgreementData } from "@/types/user";
+import { AdditionalSignupDataType, TermsAgreementData } from "@/types/user";
 import { useEffect, useState } from "react";
 
 
 
-export default function SignupTerms({ goNextStep, initialData }: SignupStepProps) {
-  const termsInitialData = initialData as Partial<TermsAgreementData>;
+export default function SignupTerms({ goNextStep, initialData, isProcessing }: SignupStepProps<AdditionalSignupDataType>) {
+  const termsInitialData = initialData.termsAgreements;
 
   const [terms, setTerms] = useState<TermsAgreementData>({
-    service: termsInitialData.service || false,
-    privacy: termsInitialData.privacy || false,
-    marketing: termsInitialData.marketing || false
+    service: termsInitialData?.service || false,
+    privacy: termsInitialData?.privacy || false,
+    marketing: termsInitialData?.marketing || false
   });
 
   const [allRequiredAgreed, setAllRequiredAgreed] = useState(false);
@@ -43,11 +43,6 @@ export default function SignupTerms({ goNextStep, initialData }: SignupStepProps
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!allRequiredAgreed) {
-      alert("필수 약관에 모두 동의해야 다음 단계로 진행할 수 있습니다.");
-      return;
-    }
-
     goNextStep({ termsAgreements: terms });
   };
   return (
@@ -60,6 +55,7 @@ export default function SignupTerms({ goNextStep, initialData }: SignupStepProps
             id="all-agree"
             checked={terms.service && terms.privacy && terms.marketing}
             onCheckedChange={handleAllAgreeChange}
+            disabled={isProcessing}
           />
           <label htmlFor="all-agree" className="text-lg font-semibold leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             모든 약관에 동의합니다
@@ -71,6 +67,7 @@ export default function SignupTerms({ goNextStep, initialData }: SignupStepProps
             id="service-agree"
             checked={terms.service}
             onCheckedChange={(checked) => handleCheckboxChange("service", Boolean(checked))}
+            disabled={isProcessing}
           />
           <label htmlFor="service-agree" className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             [필수] 서비스 이용 약관 <span className="text-blue-500 cursor-pointer text-sm ml-2">(자세히 보기)</span>
@@ -82,6 +79,7 @@ export default function SignupTerms({ goNextStep, initialData }: SignupStepProps
             id="privacy-agree"
             checked={terms.privacy}
             onCheckedChange={(checked) => handleCheckboxChange("privacy", Boolean(checked))}
+            disabled={isProcessing}
           />
           <label htmlFor="privacy-agree" className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             [필수] 개인정보 수집 및 이용 동의 <span className="text-blue-500 cursor-pointer text-sm ml-2">(자세히 보기)</span>
@@ -93,6 +91,7 @@ export default function SignupTerms({ goNextStep, initialData }: SignupStepProps
             id="marketing-agree"
             checked={terms.marketing}
             onCheckedChange={(checked) => handleCheckboxChange("marketing", Boolean(checked))}
+            disabled={isProcessing}
           />
           <label htmlFor="marketing-agree" className="text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
             [선택] 마케팅 정보 수신 동의 <span className="text-blue-500 cursor-pointer text-sm ml-2">(자세히 보기)</span>
@@ -102,7 +101,7 @@ export default function SignupTerms({ goNextStep, initialData }: SignupStepProps
         <Button
           type="submit"
           className="w-full h-14 bg-primary hover:bg-primary-600 text-white font-semibold text-base rounded-2xl mt-8"
-          disabled={!allRequiredAgreed}
+          disabled={!allRequiredAgreed || isProcessing}
         >
           다음으로
         </Button>

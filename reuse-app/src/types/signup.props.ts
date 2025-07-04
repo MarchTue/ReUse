@@ -1,7 +1,6 @@
-import { AdditionalSignupDataType } from "./user";
-
-export interface SignupStepProps {
-  initialData: Partial<AdditionalSignupDataType>;
-  goNextStep: (data: Partial<AdditionalSignupDataType>) => void;
+export interface SignupStepProps<T = any> {
+  goNextStep: (data: T) => void;
+  initialData: T;
+  isProcessing?: boolean;
   handlePrevStep?: () => void;
 }

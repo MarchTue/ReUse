@@ -89,8 +89,8 @@ export interface DefaultSignupDataType {
 }
 
 export interface AdditionalSignupDataType {
-  nickname: string;
-  profileImage: string | null;
+  nickname?: string;
+  profileImage?: string | null;
   accountInfo?: AccountInfoType,
   walletInfo?: WalletInfoType;
   termsAgreements?: {

@@ -14,10 +14,16 @@ describe('Signup - User Nickname Component', () => {
 
 
   beforeEach(() => {
+    jest.useFakeTimers();
     mockGoNextStep.mockClear();
     mockHandlePrevStep.mockClear();
     (window.alert as jest.Mock).mockClear();
 
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
   // 렌더링 테스트
@@ -56,17 +62,20 @@ describe('Signup - User Nickname Component', () => {
     fireEvent.change(nicknameInput, { target: { value: '' } });
     fireEvent.blur(nicknameInput);
 
+
     await waitFor(() => {
       expect(screen.getByText('닉네임을 입력해주세요')).toBeInTheDocument();
     });
     expect(checkButton).toBeDisabled();
     expect(nextButton).toBeDisabled();
   });
+
   it('닉네임 길이 제한을 초과할 때 에러 메시지를 표시해야 합니다.', async () => {
     render(<SignupUserNickname goNextStep={mockGoNextStep} initialData={defaultInitialData} handlePrevStep={mockHandlePrevStep} />);
     const nicknameInput = screen.getByPlaceholderText('닉네임 (2~12자)');
     fireEvent.change(nicknameInput, { target: { value: 'verylongnickname12345' } }); // 12자 초과
     fireEvent.blur(nicknameInput);
+
 
     await waitFor(() => {
       expect(screen.getByText('닉네임은 2자 이상, 12자 이하로 입력해주세요')).toBeInTheDocument();
@@ -86,6 +95,7 @@ describe('Signup - User Nickname Component', () => {
     expect(screen.getByText('확인 중...')).toBeInTheDocument();
     expect(checkButton).toBeDisabled(); // 로딩 중에는 버튼 비활성화
 
+
     // 1초 후 로딩 메시지 사라지고 '사용 가능' 메시지 표시
     await waitFor(() => {
       expect(screen.queryByText('확인 중...')).not.toBeInTheDocument();
@@ -101,6 +111,9 @@ describe('Signup - User Nickname Component', () => {
     // 닉네임 입력 및 중복 확인 성공
     fireEvent.change(nicknameInput, { target: { value: 'uniqueName' } });
     fireEvent.click(checkButton);
+
+    jest.runAllTimers();
+
     await waitFor(() => expect(screen.getByText('사용 가능한 닉네임입니다!', { exact: false })).toBeInTheDocument());
 
     // 닉네임 변경
@@ -160,6 +173,8 @@ describe('Signup - User Nickname Component', () => {
 
     // 중복 확인 수행
     fireEvent.click(checkButton);
+    jest.runAllTimers();
+
     await waitFor(() => expect(screen.getByText('사용 가능한 닉네임입니다', { exact: false })).toBeInTheDocument());
 
     // "다음으로" 버튼 클릭

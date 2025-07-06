@@ -92,12 +92,13 @@ export default function SignupUserNickname({ goNextStep, initialData, handlePrev
           {imageUrl ? (
             <Image src={imageUrl} alt="Profile" className="w-full h-full object-cover rounded-full" width={128} height={128} />
           ) : (
-            <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 24 24" data-testid="profile-image-placeholder">
               <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           )}
           <Button
             type="button"
+            data-testid='profile-image-upload-button'
             className="absolute bottom-0 right-0 p-3 bg-primary rounded-full text-white hover:bg-primary-600 transition-colors z-10"
             onClick={() => {
               setImageUrl('https://http.cat/images/100.jpg');
@@ -129,7 +130,7 @@ export default function SignupUserNickname({ goNextStep, initialData, handlePrev
             type="button" // form submit 방지를 위해 type="button"
             onClick={checkNicknameAvailability}
             className="h-14 bg-primary hover:bg-primary-600 text-white font-semibold text-base rounded-2xl px-4"
-            disabled={!!nicknameError || isCheckingNickname || nickname.length < 2 || nickname.length > 10} // 유효성 검사 통과 및 로딩 상태에 따라 비활성화
+            disabled={!!nicknameError || isCheckingNickname || nickname.length < 2 || nickname.length > 12} // 유효성 검사 통과 및 로딩 상태에 따라 비활성화
           >
             {isCheckingNickname ? "확인 중..." : "중복확인"}
           </Button>
@@ -141,7 +142,7 @@ export default function SignupUserNickname({ goNextStep, initialData, handlePrev
         {isCheckingNickname && (
           <p className="pl-2 text-gray-500 text-sm mt-1">닉네임 중복 확인 중...</p>
         )}
-        {!nicknameError && isNicknameChecked && !isCheckingNickname && isNicknameTouched && ( // 변경지점 7: "사용 가능" 메시지 표시 조건에 isNicknameTouched 추가
+        {!nicknameError && isNicknameChecked && !isCheckingNickname && isNicknameTouched && (
           <p className="pl-2 text-green-500 text-sm mt-1">사용 가능한 닉네임입니다!</p>
         )}
         <Button

@@ -3,7 +3,6 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import SignupTerms from "../signupTerms";
 import { AdditionalSignupDataType } from "@/types/user";
 import '@testing-library/jest-dom';
-import { useForm, FormProvider } from "react-hook-form";
 
 
 describe('SignupTerms Component', () => {

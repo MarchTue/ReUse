@@ -1,3 +1,4 @@
+import { Http2ServerRequest } from "http2";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -11,6 +12,11 @@ const nextConfig: NextConfig = {
   //   };
   //   return config;
   // },
+  images: {
+    remotePatterns: [
+      { hostname: 'http.cat' }
+    ]
+  }
 };
 
 export default nextConfig;

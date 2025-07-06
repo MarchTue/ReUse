@@ -1,8 +1,6 @@
-@import "tailwindcss";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 body {
   font-family: Arial, Helvetica, sans-serif;
@@ -88,10 +86,10 @@ body {
 
 @layer base {
   * {
+    @apply border-border;
   }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    @apply bg-background text-foreground;
   }
 }
 

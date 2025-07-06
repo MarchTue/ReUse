@@ -1,3 +1,28 @@
+export interface BankType {
+  id: string; // 내부적으로 사용할 고유 ID (예: ENUM 키 값)
+  label: string; // 사용자에게 보여줄 한국어 이름
+}
+
+export const BANKS: BankType[] = [
+  { id: 'KAKAO_BANK', label: '카카오뱅크' },
+  { id: 'TOSS_BANK', label: '토스뱅크' },
+  { id: 'KB_BANK', label: 'KB국민은행' },
+  { id: 'SHINHAN_BANK', label: '신한은행' },
+  { id: 'HANA_BANK', label: '하나은행' },
+  { id: 'WOORI_BANK', label: '우리은행' },
+  { id: 'NH_BANK', label: 'NH농협은행' },
+  { id: 'IBK_BANK', label: 'IBK기업은행' },
+  { id: 'K_BANK', label: '케이뱅크' },
+  { id: 'CITY_BANK', label: '씨티은행' },
+  { id: 'SC_BANK', label: 'SC제일은행' },
+  { id: 'DGB_BANK', label: 'DGB대구은행' },
+  { id: 'BNK_BUSAN', label: 'BNK부산은행' },
+  { id: 'BNK_KYONGNAM', label: 'BNK경남은행' },
+  { id: 'JEONBUK_BANK', label: '전북은행' },
+  { id: 'JEJU_BANK', label: '제주은행' },
+  { id: 'SH_BANK', label: 'Sh수협은행' },
+];
+
 export enum BankEnum {
   KAKAO_BANK,
   TOSS_BANK,
@@ -33,7 +58,7 @@ export enum WalletTypeEnum {
   GOOGLEPAY,
 }
 
-export enum walletPlatformEnum {
+export enum WalletPlatformEnum {
   KAKAOPAY,
   TOSSPAY,
   NAVERPAY,
@@ -64,13 +89,26 @@ export interface DefaultSignupDataType {
 }
 
 export interface AdditionalSignupDataType {
-  nickname: string;
-  profileImage: string | null;
-  accountInfo: AccountInfoType,
-  walletInfo: WalletInfoType;
+  nickname?: string;
+  profileImage?: string | null;
+  accountInfo?: AccountInfoType,
+  walletInfo?: WalletInfoType;
+  termsAgreements?: {
+    service: boolean;
+    privacy: boolean;
+    marketing: boolean;
+  };
 }
 
 export interface SignupDataType extends DefaultSignupDataType, AdditionalSignupDataType { }
+
+
+export interface TermsAgreementData {
+  service: boolean;
+  privacy: boolean;
+  marketing: boolean;
+}
+
 
 
 export interface RaonData {

@@ -10,7 +10,8 @@
     "lint": "next lint",
     "test": "jest",
     "test:watch" : "jest --watch",
-    "test-log" : "npx jest --runInBand --verbose"
+    "test-log" : "npx jest --runInBand --verbose",
+    "test-watch-log" : "npx jest --runInBand --verbose --watch"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

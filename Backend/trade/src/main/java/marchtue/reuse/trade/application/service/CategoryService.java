@@ -21,8 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
-
-  private final JwtUtil jwtUtil;
+  
   private final CategoryRepository categoryRepository;
 
   public ApiResponse addCategory(AddCategoryRequest req) {
@@ -39,7 +38,7 @@ public class CategoryService {
 
     AddCategoryResponse response = new AddCategoryResponse(category.getId(), category.getName());
 
-    return new ApiResponse(200, "succeeded", response);
+    return ApiResponse.ok(response);
 
   }
 
@@ -51,7 +50,7 @@ public class CategoryService {
         .map(cate -> new CategoryListResponse(cate.getId(), cate.getName()))
         .toList();
 
-    return new ApiResponse(200, "succeeded", response);
+    return ApiResponse.ok(response);
   }
 
 
@@ -67,7 +66,7 @@ public class CategoryService {
     Category updatedCategory = category.update(req.name(), req.isActive());
     categoryRepository.save(updatedCategory);
 
-    return new ApiResponse(200, "succeeded", null);
+    return ApiResponse.ok();
 
   }
 
@@ -79,7 +78,7 @@ public class CategoryService {
     Category category = findById(categoryId);
     categoryRepository.delete(category);
 
-    return new ApiResponse(200, "succeeded", null);
+    return ApiResponse.ok();
 
   }
 
@@ -106,7 +105,7 @@ public class CategoryService {
     return categoryRepository.findByName(name);
   }
 
-  private Category findById(UUID id) {
+  public Category findById(UUID id) {
     return categoryRepository.findById(id)
         .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
   }

@@ -57,7 +57,7 @@ public class UserService {
       throw new BusinessException(ErrorCode.DUPLICATED_NICKNAME);
     }
 
-    return new ApiResponse(200, "succeeded", null);
+    return ApiResponse.ok();
 
   }
 
@@ -78,7 +78,7 @@ public class UserService {
 
     // 없다면 회원가입 추가정보 요청 응답
     if (user == null) {
-      return new ApiResponse(404, "user not found", "");
+      return ApiResponse.error(404, "user not found");
     }
     return null;
   }
@@ -125,7 +125,7 @@ public class UserService {
 
     Map<String, UUID> response = Map.of("user_id", savedUser.getId());
 
-    return new ApiResponse(200, "succeeded", response);
+    return ApiResponse.ok(response);
 
   }
 
@@ -160,7 +160,7 @@ public class UserService {
         user.getAccount(),
         user.getPhoneNumber()
     );
-    return new ApiResponse(200, "succceded", res);
+    return ApiResponse.ok(res);
   }
 
   public ApiResponse favCategory(UUID categoryId) {
@@ -174,7 +174,7 @@ public class UserService {
       userCategoryRepository.delete(category);
     }
 
-    return new ApiResponse(200, "succeeded", null);
+    return ApiResponse.ok();
   }
 
   private User findByNickname(String nickname) {

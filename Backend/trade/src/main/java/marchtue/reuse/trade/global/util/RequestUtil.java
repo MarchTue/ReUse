@@ -1,9 +1,8 @@
 package marchtue.reuse.trade.global.util;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 public class RequestUtil {
 
@@ -12,15 +11,13 @@ public class RequestUtil {
   }
 
   public static UUID getCurrentUserId() {
-    ServletRequestAttributes attributes =
-        (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-    if (attributes == null) {
+    if (auth == null || !auth.isAuthenticated() || auth.getPrincipal() == null) {
       return null;
     }
 
-    HttpServletRequest req = attributes.getRequest();
-    return UUID.fromString(req.getHeader("X-User-Id"));
+    return (UUID) auth.getPrincipal();
   }
 
 

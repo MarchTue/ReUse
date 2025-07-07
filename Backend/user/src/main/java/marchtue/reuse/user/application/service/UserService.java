@@ -1,13 +1,17 @@
 package marchtue.reuse.user.application.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
 import marchtue.reuse.user.application.dto.response.MypageResponse;
+import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
+import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.domain.model.Credential;
 import marchtue.reuse.user.domain.model.User;
@@ -22,7 +26,6 @@ import marchtue.reuse.user.domain.repository.WalletRepository;
 import marchtue.reuse.user.exception.BusinessException;
 import marchtue.reuse.user.exception.ErrorCode;
 import marchtue.reuse.user.global.dto.ApiResponse;
-import marchtue.reuse.user.global.util.JwtUtil;
 import marchtue.reuse.user.global.util.NicknameFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +41,7 @@ public class UserService {
   private final WalletRepository walletRepository;
   private final UserRatingRepository userRatingRepository;
   private final UserCategoryRepository userCategoryRepository;
-  private final JwtUtil jwtUtil;
+  private final UserRatingService userRatingService;
 
   public ApiResponse checkNickname(NicknameCheckRequest req) {
     String nickname = req.nickname();
@@ -57,7 +60,7 @@ public class UserService {
       throw new BusinessException(ErrorCode.DUPLICATED_NICKNAME);
     }
 
-    return new ApiResponse(200, "succeeded", null);
+    return ApiResponse.ok();
 
   }
 
@@ -78,7 +81,7 @@ public class UserService {
 
     // 없다면 회원가입 추가정보 요청 응답
     if (user == null) {
-      return new ApiResponse(404, "user not found", "");
+      return ApiResponse.error(404, "user not found");
     }
     return null;
   }
@@ -125,7 +128,7 @@ public class UserService {
 
     Map<String, UUID> response = Map.of("user_id", savedUser.getId());
 
-    return new ApiResponse(200, "succeeded", response);
+    return ApiResponse.ok(response);
 
   }
 
@@ -160,7 +163,7 @@ public class UserService {
         user.getAccount(),
         user.getPhoneNumber()
     );
-    return new ApiResponse(200, "succceded", res);
+    return ApiResponse.ok(res);
   }
 
   public ApiResponse favCategory(UUID categoryId) {
@@ -174,8 +177,27 @@ public class UserService {
       userCategoryRepository.delete(category);
     }
 
-    return new ApiResponse(200, "succeeded", null);
+    return ApiResponse.ok();
   }
+
+  public List<UserSimpleInfoResponse> getUserSimpleInfoList(List<UUID> userIds) {
+    return userIds.stream()
+        .map(userRepository::findById)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> new UserSimpleInfoResponse(
+            user.getId(),
+            user.getNickname(),
+            user.getUserRating().getRateScore()))
+        .toList();
+  }
+
+  public ReadSellerResponse getSellerInfo(UUID sellerId) {
+    User user = findById(sellerId);
+    UserRating userRating = userRatingService.findByUserId(sellerId);
+    return ReadSellerResponse.from(user, userRating);
+  }
+
 
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
@@ -211,6 +233,5 @@ public class UserService {
         .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
         .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
-
 
 }

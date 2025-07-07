@@ -28,14 +28,11 @@ public class UserInternalController {
     // 사용자 존재 여부 확인 후 반환
     User user = userService.findByCi(req.ci_sh());
 
-    log.info("조회된 유저: {}", user);
-
     if (user == null) {
       return new UserInfoResponse(null, null);
     }
 
     UserInfoResponse res = new UserInfoResponse(user.getId().toString(), user.getRole());
-    log.info("응답: {}", res);
     return res;
   }
 

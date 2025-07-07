@@ -20,11 +20,13 @@ public class SecurityConfig {
     http
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(user -> user
-            .requestMatchers("api/be/v1/internal/users/**").permitAll()
+            .requestMatchers("internal/users/**").permitAll()
+            .requestMatchers("api/be/v1/users/check-user").permitAll()
+            .requestMatchers("api/be/v1/users/check-nickname").permitAll()
+            .requestMatchers("api/be/v1/users/register").permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    ;
     return http.build();
   }
 }

@@ -11,6 +11,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import marchtue.reuse.user.global.util.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -30,10 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     if (token != null && jwtUtil.validateToken(token)) {
       Claims claims = jwtUtil.getUserInfoFromToken(token);
       UUID userId = UUID.fromString(claims.getSubject());
+      String role = claims.get("role", String.class);
+      List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
 
       UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
           userId, null,
-          List.of());
+          authorities);
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
     }

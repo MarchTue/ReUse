@@ -1,6 +1,5 @@
 package marchtue.reuse.trade.application.service;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,8 @@ import marchtue.reuse.trade.exception.BusinessException;
 import marchtue.reuse.trade.exception.ErrorCode;
 import marchtue.reuse.trade.global.dto.ApiResponse;
 import marchtue.reuse.trade.global.util.JwtUtil;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,8 +25,8 @@ public class CategoryService {
   private final JwtUtil jwtUtil;
   private final CategoryRepository categoryRepository;
 
-  public ApiResponse addCategory(AddCategoryRequest req, HttpServletRequest request) {
-    UserRoleEnum role = checkUserRole(request);
+  public ApiResponse addCategory(AddCategoryRequest req) {
+    UserRoleEnum role = checkUserRole();
     isAdminCheck(role);
 
     // 중복확인
@@ -55,9 +56,8 @@ public class CategoryService {
 
 
   // 카테고리 수정
-  public ApiResponse patchCategory(UUID categoryId, PatchCategoryRequest req,
-      HttpServletRequest request) {
-    UserRoleEnum role = checkUserRole(request);
+  public ApiResponse patchCategory(UUID categoryId, PatchCategoryRequest req) {
+    UserRoleEnum role = checkUserRole();
     isAdminCheck(role);
 
     Category category = findById(categoryId);
@@ -72,8 +72,8 @@ public class CategoryService {
   }
 
   // 카테고리 삭제
-  public ApiResponse deleteCategory(UUID categoryId, HttpServletRequest request) {
-    UserRoleEnum role = checkUserRole(request);
+  public ApiResponse deleteCategory(UUID categoryId) {
+    UserRoleEnum role = checkUserRole();
     isAdminCheck(role);
 
     Category category = findById(categoryId);
@@ -83,14 +83,16 @@ public class CategoryService {
 
   }
 
-  private UserRoleEnum checkUserRole(HttpServletRequest request) {
-    String token = jwtUtil.getTokenFromHeader(request, JwtUtil.AUTHORIZATION_HEADER);
-    if (token == null || !jwtUtil.validateToken(token)) {
+  private UserRoleEnum checkUserRole() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null || !auth.isAuthenticated()) {
       throw new BusinessException(ErrorCode.NO_ROLE);
     }
 
-    return jwtUtil.getUserRole(token);
-
+    return auth.getAuthorities().stream()
+        .findFirst()
+        .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
+        .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
 
   private boolean isAdminCheck(UserRoleEnum role) {

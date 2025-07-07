@@ -1,4 +1,4 @@
-package marchtue.reuse.trade.infrastructure;
+package marchtue.reuse.trade.infrastructure.jpa;
 
 import java.util.UUID;
 import marchtue.reuse.trade.domain.model.Review;

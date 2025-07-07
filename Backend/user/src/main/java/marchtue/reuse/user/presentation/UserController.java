@@ -52,9 +52,8 @@ public class UserController {
 
   @GetMapping("/category/{categoryId}")
   public ApiResponse favCategory(
-      @PathVariable UUID categoryId,
-      HttpServletRequest request
+      @PathVariable UUID categoryId
   ) {
-    return userService.favCategory(categoryId, request);
+    return userService.favCategory(categoryId);
   }
 }

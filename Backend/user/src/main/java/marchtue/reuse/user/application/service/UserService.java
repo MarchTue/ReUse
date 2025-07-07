@@ -144,7 +144,7 @@ public class UserService {
   public ApiResponse myPage(HttpServletRequest request, UUID userId) throws BusinessException {
     UUID targetUserId = getUserIdFromContext();
     if (!userId.equals(targetUserId)) {
-      if (checkUserRole(request) == UserRoleEnum.ROLE_USER) {
+      if (checkUserRole() == UserRoleEnum.ROLE_USER) {
         throw new BusinessException(ErrorCode.FORBIDDEN);
       }
     }
@@ -163,7 +163,7 @@ public class UserService {
     return new ApiResponse(200, "succceded", res);
   }
 
-  public ApiResponse favCategory(UUID categoryId, HttpServletRequest request) {
+  public ApiResponse favCategory(UUID categoryId) {
     UUID userId = getUserIdFromContext();
     UserCategory category = userCategoryRepository.findByUserIdAndCategoryId(userId, categoryId)
         .orElse(null);
@@ -200,7 +200,7 @@ public class UserService {
         .getPrincipal();
   }
 
-  private UserRoleEnum checkUserRole(HttpServletRequest request) {
+  private UserRoleEnum checkUserRole() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth == null || !auth.isAuthenticated()) {
       throw new BusinessException(ErrorCode.NO_ROLE);

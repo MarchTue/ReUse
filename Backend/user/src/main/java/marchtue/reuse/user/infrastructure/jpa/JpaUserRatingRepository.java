@@ -1,4 +1,4 @@
-package marchtue.reuse.user.infrastructure;
+package marchtue.reuse.user.infrastructure.jpa;
 
 import java.util.UUID;
 import marchtue.reuse.user.domain.model.UserRating;

@@ -1,13 +1,16 @@
 package marchtue.reuse.user.application.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
 import marchtue.reuse.user.application.dto.response.MypageResponse;
+import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.domain.model.Credential;
 import marchtue.reuse.user.domain.model.User;
@@ -176,6 +179,19 @@ public class UserService {
 
     return ApiResponse.ok();
   }
+
+  public List<UserSimpleInfoResponse> getUserSimpleInfoList(List<UUID> userIds) {
+    return userIds.stream()
+        .map(userRepository::findById)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> new UserSimpleInfoResponse(
+            user.getId(),
+            user.getNickname(),
+            user.getUserRating().getRateScore()))
+        .toList();
+  }
+
 
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());

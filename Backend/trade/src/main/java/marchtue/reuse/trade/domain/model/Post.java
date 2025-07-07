@@ -49,7 +49,7 @@ public class Post extends BaseEntity {
 
   private ProductStateEnum productState;
 
-  private PostStateEnum tradeState;
+  private PostStateEnum postState;
 
   private long price;
 
@@ -80,7 +80,7 @@ public class Post extends BaseEntity {
         .isDirect(isDirect)
         .directAddress(directAddress)
         .productState(productStateEnum)
-        .tradeState(PostStateEnum.IN_PROGRESS)
+        .postState(PostStateEnum.IN_PROGRESS)
         .price(price)
         .count(0L)
         .category(category)

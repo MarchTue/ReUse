@@ -1,10 +1,13 @@
 package marchtue.reuse.user.presentation;
 
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.user.application.dto.request.DidCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserInfoRequest;
 import marchtue.reuse.user.application.dto.response.UserInfoResponse;
+import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.application.service.UserService;
 import marchtue.reuse.user.domain.model.User;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +43,11 @@ public class UserInternalController {
   public ResponseEntity<Void> CheckDid(@RequestBody DidCheckRequest req) {
     userService.checkDid(req.userId(), req.did());
     return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/info-list")
+  public List<UserSimpleInfoResponse> getUserSimpleInfoList(@RequestBody List<UUID> userIds) {
+    return userService.getUserSimpleInfoList(userIds);
   }
 
 }

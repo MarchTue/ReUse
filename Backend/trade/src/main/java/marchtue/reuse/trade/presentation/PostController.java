@@ -1,12 +1,15 @@
 package marchtue.reuse.trade.presentation;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
 import marchtue.reuse.trade.application.service.PostService;
 import marchtue.reuse.trade.global.dto.ApiResponse;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,4 +26,13 @@ public class PostController {
   ) {
     return postService.createPost(req);
   }
+
+  // 판매글 목록 조회
+  @GetMapping
+  public ApiResponse readPostList(
+      @RequestParam(required = false) UUID categoryId
+  ) {
+    return postService.readPostList(categoryId);
+  }
+
 }

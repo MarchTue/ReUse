@@ -1,7 +1,6 @@
 package marchtue.reuse.trade.presentation;
 
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +28,9 @@ public class CategoryController {
   // 카테고리등록
   @PostMapping
   public ApiResponse addCategory(
-      @RequestBody AddCategoryRequest req,
-      HttpServletRequest request
+      @RequestBody AddCategoryRequest req
   ) {
-    return categoryService.addCategory(req, request);
+    return categoryService.addCategory(req);
   }
 
   @GetMapping
@@ -44,18 +42,16 @@ public class CategoryController {
   @PatchMapping("{categoryId}")
   public ApiResponse patchCategory(
       @PathVariable UUID categoryId,
-      @RequestBody PatchCategoryRequest req,
-      HttpServletRequest request
+      @RequestBody PatchCategoryRequest req
   ) {
-    return categoryService.patchCategory(categoryId, req, request);
+    return categoryService.patchCategory(categoryId, req);
   }
 
   @DeleteMapping("{categoryId}")
   public ApiResponse deleteCategory(
-      @PathVariable UUID categoryId,
-      HttpServletRequest request
+      @PathVariable UUID categoryId
   ) {
-    return categoryService.deleteCategory(categoryId, request);
+    return categoryService.deleteCategory(categoryId);
   }
 
 }

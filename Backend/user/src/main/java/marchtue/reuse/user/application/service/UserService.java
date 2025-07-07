@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
+import marchtue.reuse.user.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.user.application.dto.response.MypageResponse;
 import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
@@ -198,6 +199,18 @@ public class UserService {
     return ReadSellerResponse.from(user, userRating);
   }
 
+  public List<BuyerInfoResponse> getBuyerInfoList(List<UUID> userIds) {
+    return userIds.stream()
+        .map(userRepository::findById)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> new BuyerInfoResponse(
+            user.getId(),
+            user.getNickname(),
+            user.getProfileImage()))
+        .toList();
+  }
+
 
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
@@ -233,5 +246,6 @@ public class UserService {
         .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
         .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
+
 
 }

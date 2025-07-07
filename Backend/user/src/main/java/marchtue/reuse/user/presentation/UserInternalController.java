@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.user.application.dto.request.DidCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserInfoRequest;
+import marchtue.reuse.user.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.user.application.dto.response.UserInfoResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
@@ -58,6 +59,12 @@ public class UserInternalController {
       @PathVariable UUID sellerId
   ) {
     return userService.getSellerInfo(sellerId);
+  }
+
+  @PostMapping("/buyer-infos")
+  public List<BuyerInfoResponse> getBuyerInfoList(
+      @RequestBody List<UUID> userIds) {
+    return userService.getBuyerInfoList(userIds);
   }
 
 }

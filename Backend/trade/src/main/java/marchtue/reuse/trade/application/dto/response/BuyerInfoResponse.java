@@ -1,0 +1,11 @@
+package marchtue.reuse.trade.application.dto.response;
+
+import java.util.UUID;
+
+public record BuyerInfoResponse(
+    UUID userId,
+    String nickname,
+    String profile
+) {
+
+}

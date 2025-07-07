@@ -9,18 +9,24 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import marchtue.reuse.trade.application.client.UserClient;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
+import marchtue.reuse.trade.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.trade.application.dto.response.CreatePostResponse;
+import marchtue.reuse.trade.application.dto.response.ProposalListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostResponse;
 import marchtue.reuse.trade.application.dto.response.ReadProductResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
+import marchtue.reuse.trade.application.dto.response.SellerInProposalsResponse;
 import marchtue.reuse.trade.application.dto.response.UserSimpleInfoResponse;
+import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.model.Category;
 import marchtue.reuse.trade.domain.model.Post;
 import marchtue.reuse.trade.domain.model.PostImage;
+import marchtue.reuse.trade.domain.model.Proposal;
 import marchtue.reuse.trade.domain.repository.FavPostRepository;
 import marchtue.reuse.trade.domain.repository.PostImageRepository;
 import marchtue.reuse.trade.domain.repository.PostRepository;
+import marchtue.reuse.trade.domain.repository.ProposalRepository;
 import marchtue.reuse.trade.exception.BusinessException;
 import marchtue.reuse.trade.exception.ErrorCode;
 import marchtue.reuse.trade.global.dto.ApiResponse;
@@ -123,15 +129,53 @@ public class PostService {
   public ApiResponse readPost(UUID postId) {
     Post post = findById(postId);
     UUID sellerId = post.getCreatedBy();
+    UUID currentId = RequestUtil.getCurrentUserId();
+
     ReadSellerResponse sellerInfo = userClient.getSellerInfo(sellerId);
-    boolean isFav = favPostRepository.existsByUserIdAndPostId(RequestUtil.getCurrentUserId(),
+    boolean isFav = favPostRepository.existsByUserIdAndPostId(currentId,
         postId);
     List<String> images = postImageRepository.findAllByPostId(postId).stream()
         .map(PostImage::getImageLink)
         .toList();
     ReadProductResponse postInfo = ReadProductResponse.from(post, images, isFav);
-    ReadPostResponse res = new ReadPostResponse(postInfo, sellerInfo);
-    return ApiResponse.ok(res);
+
+    if (sellerId.equals(currentId)) {
+      if (post.getPostState() == PostStateEnum.IN_PROGRESS) {
+        List<Proposal> proposalList = post.getProposals();
+        List<UUID> userIds = proposalList.stream()
+            .map(Proposal::getCreatedBy)
+            .distinct()
+            .toList();
+
+        List<BuyerInfoResponse> userInfos = userClient.getBuyerInfoList(userIds);
+        Map<UUID, BuyerInfoResponse> buyerInfoMap = userInfos.stream()
+            .collect(Collectors.toMap(BuyerInfoResponse::userId, Function.identity()));
+
+        List<ProposalListResponse> buyerInfoList = proposalList.stream()
+            .map(proposal -> {
+              BuyerInfoResponse userInfo = buyerInfoMap.get(proposal.getCreatedBy());
+              String nickname = userInfo != null ? userInfo.nickname() : null;
+              String profile = userInfo != null ? userInfo.profile() : null;
+              return ProposalListResponse.from(proposal, nickname, profile);
+            })
+            .toList();
+
+        SellerInProposalsResponse res = new SellerInProposalsResponse(postInfo, sellerInfo,
+            buyerInfoList);
+
+        return ApiResponse.ok(res);
+
+      } else if (post.getPostState() == PostStateEnum.TRADING) {
+        String buyserAdd =
+      }
+
+    } else {
+      ReadPostResponse res = new ReadPostResponse(postInfo, sellerInfo);
+      return ApiResponse.ok(res);
+    }
+
+    return null;
+
   }
 
 

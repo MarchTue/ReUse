@@ -24,6 +24,8 @@ import marchtue.reuse.user.exception.ErrorCode;
 import marchtue.reuse.user.global.dto.ApiResponse;
 import marchtue.reuse.user.global.util.JwtUtil;
 import marchtue.reuse.user.global.util.NicknameFilter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,7 +142,7 @@ public class UserService {
   }
 
   public ApiResponse myPage(HttpServletRequest request, UUID userId) throws BusinessException {
-    UUID targetUserId = getUserInfoFromToken(request);
+    UUID targetUserId = getUserIdFromContext();
     if (!userId.equals(targetUserId)) {
       if (checkUserRole(request) == UserRoleEnum.ROLE_USER) {
         throw new BusinessException(ErrorCode.FORBIDDEN);
@@ -162,7 +164,7 @@ public class UserService {
   }
 
   public ApiResponse favCategory(UUID categoryId, HttpServletRequest request) {
-    UUID userId = getUserInfoFromToken(request);
+    UUID userId = getUserIdFromContext();
     UserCategory category = userCategoryRepository.findByUserIdAndCategoryId(userId, categoryId)
         .orElse(null);
     if (category == null) {
@@ -193,22 +195,21 @@ public class UserService {
     return userRatingRepository.findByUserId(user.getId());
   }
 
-  private UUID getUserInfoFromToken(HttpServletRequest request) {
-    String token = jwtUtil.getTokenFromHeader(request, jwtUtil.AUTHORIZATION_HEADER);
-    if (token == null || !jwtUtil.validateToken(token)) {
-      throw new BusinessException(ErrorCode.NO_ROLE);
-    }
-    return UUID.fromString(jwtUtil.getUserInfoFromToken(token).getSubject());
+  private UUID getUserIdFromContext() {
+    return (UUID) SecurityContextHolder.getContext().getAuthentication()
+        .getPrincipal();
   }
 
   private UserRoleEnum checkUserRole(HttpServletRequest request) {
-    String token = jwtUtil.getTokenFromHeader(request, JwtUtil.AUTHORIZATION_HEADER);
-    if (token == null || !jwtUtil.validateToken(token)) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null || !auth.isAuthenticated()) {
       throw new BusinessException(ErrorCode.NO_ROLE);
     }
 
-    return jwtUtil.getUserRole(token);
-
+    return auth.getAuthorities().stream()
+        .findFirst()
+        .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
+        .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
 
 

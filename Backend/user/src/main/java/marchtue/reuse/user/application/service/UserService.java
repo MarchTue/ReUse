@@ -10,6 +10,7 @@ import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
 import marchtue.reuse.user.application.dto.response.MypageResponse;
+import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.domain.model.Credential;
@@ -25,7 +26,6 @@ import marchtue.reuse.user.domain.repository.WalletRepository;
 import marchtue.reuse.user.exception.BusinessException;
 import marchtue.reuse.user.exception.ErrorCode;
 import marchtue.reuse.user.global.dto.ApiResponse;
-import marchtue.reuse.user.global.util.JwtUtil;
 import marchtue.reuse.user.global.util.NicknameFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +41,7 @@ public class UserService {
   private final WalletRepository walletRepository;
   private final UserRatingRepository userRatingRepository;
   private final UserCategoryRepository userCategoryRepository;
-  private final JwtUtil jwtUtil;
+  private final UserRatingService userRatingService;
 
   public ApiResponse checkNickname(NicknameCheckRequest req) {
     String nickname = req.nickname();
@@ -192,6 +192,12 @@ public class UserService {
         .toList();
   }
 
+  public ReadSellerResponse getSellerInfo(UUID sellerId) {
+    User user = findById(sellerId);
+    UserRating userRating = userRatingService.findByUserId(sellerId);
+    return ReadSellerResponse.from(user, userRating);
+  }
+
 
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
@@ -227,6 +233,5 @@ public class UserService {
         .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
         .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
-
 
 }

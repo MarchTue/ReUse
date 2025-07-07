@@ -6,11 +6,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.user.application.dto.request.DidCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserInfoRequest;
+import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.user.application.dto.response.UserInfoResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.application.service.UserService;
 import marchtue.reuse.user.domain.model.User;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +51,13 @@ public class UserInternalController {
   @PostMapping("/info-list")
   public List<UserSimpleInfoResponse> getUserSimpleInfoList(@RequestBody List<UUID> userIds) {
     return userService.getUserSimpleInfoList(userIds);
+  }
+
+  @GetMapping("/seller-info/{sellerId}")
+  public ReadSellerResponse getSellerInfo(
+      @PathVariable UUID sellerId
+  ) {
+    return userService.getSellerInfo(sellerId);
   }
 
 }

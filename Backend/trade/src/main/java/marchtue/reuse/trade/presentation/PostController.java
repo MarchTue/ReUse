@@ -6,6 +6,7 @@ import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
 import marchtue.reuse.trade.application.service.PostService;
 import marchtue.reuse.trade.global.dto.ApiResponse;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +31,18 @@ public class PostController {
   // 판매글 목록 조회
   @GetMapping
   public ApiResponse readPostList(
-      @RequestParam(required = false) UUID categoryId
+      @RequestParam(required = false) UUID categoryId,
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") int size
   ) {
-    return postService.readPostList(categoryId);
+    return postService.readPostList(categoryId, page, size);
   }
 
+  // 판매글 상세조회
+  @GetMapping("/{postId}")
+  public ApiResponse readPost(
+      @PathVariable UUID postId
+  ) {
+    return postService.readPost(postId);
+  }
 }

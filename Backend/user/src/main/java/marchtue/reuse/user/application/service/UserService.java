@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
+import marchtue.reuse.user.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.user.application.dto.response.MypageResponse;
 import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
@@ -32,6 +34,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -198,6 +201,22 @@ public class UserService {
     return ReadSellerResponse.from(user, userRating);
   }
 
+  public List<BuyerInfoResponse> getBuyerInfoList(List<UUID> userIds) {
+
+    List<BuyerInfoResponse> userInfos = userIds.stream()
+        .map(userRepository::findById)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> new BuyerInfoResponse(
+            user.getId(),
+            user.getNickname(),
+            user.getProfileImage()))
+        .toList();
+
+    log.info("userInfos: {}", userInfos);
+    return userInfos;
+  }
+
 
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
@@ -233,5 +252,6 @@ public class UserService {
         .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
         .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
+
 
 }

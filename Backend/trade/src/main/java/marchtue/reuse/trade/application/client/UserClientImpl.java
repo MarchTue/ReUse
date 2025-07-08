@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import marchtue.reuse.trade.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.trade.application.dto.response.UserSimpleInfoResponse;
 import org.springframework.http.HttpEntity;
@@ -36,6 +37,15 @@ public class UserClientImpl implements UserClient {
     ReadSellerResponse response = restTemplate.getForObject(url, ReadSellerResponse.class,
         sellerId);
     return response;
+  }
+
+  @Override
+  public List<BuyerInfoResponse> getBuyerInfoList(List<UUID> userIds) {
+    String url = "http://user-service:19091/internal/users/buyer-infos";
+    HttpEntity<List<UUID>> request = new HttpEntity<>(userIds);
+    ResponseEntity<BuyerInfoResponse[]> response = restTemplate.postForEntity(url, request,
+        BuyerInfoResponse[].class);
+    return Arrays.asList(Objects.requireNonNull(response.getBody()));
   }
 
 }

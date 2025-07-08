@@ -34,6 +34,9 @@ const config = {
           600: "#0056CC",
           700: "#004499",
         },
+        grad: {
+          DEFAULT: "#8639FB",
+        },
         secondary: {
           DEFAULT: "#F3F3F4", // iOS Gray
           foreground: "#1C1C1E",

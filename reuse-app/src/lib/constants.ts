@@ -21,3 +21,11 @@ export const PRODUCT_CONDITIONS = [
   { value: "poor", label: "하" },
 ] as const;
 
+
+export const NAVIGATION_TABS = [
+  { id: "home", label: "홈", path: "/main" },
+  { id: "product", label: "상품", path: "/product" },
+  { id: "chat", label: "채팅", path: "/chat" },
+  { id: "favourite", label: "관심 상품", path: "/favourite" },
+  { id: "myPage", label: "마이", path: "/mypage" },
+] as const;

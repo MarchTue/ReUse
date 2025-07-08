@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.user.application.dto.request.CheckUserRequest;
 import marchtue.reuse.user.application.dto.request.NicknameCheckRequest;
 import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
@@ -33,6 +34,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -200,7 +202,8 @@ public class UserService {
   }
 
   public List<BuyerInfoResponse> getBuyerInfoList(List<UUID> userIds) {
-    return userIds.stream()
+
+    List<BuyerInfoResponse> userInfos = userIds.stream()
         .map(userRepository::findById)
         .filter(Optional::isPresent)
         .map(Optional::get)
@@ -209,6 +212,9 @@ public class UserService {
             user.getNickname(),
             user.getProfileImage()))
         .toList();
+
+    log.info("userInfos: {}", userInfos);
+    return userInfos;
   }
 
 

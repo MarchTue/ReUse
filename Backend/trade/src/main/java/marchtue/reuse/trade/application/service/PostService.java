@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.trade.application.client.UserClient;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
 import marchtue.reuse.trade.application.dto.response.BuyerInfoResponse;
@@ -26,7 +27,6 @@ import marchtue.reuse.trade.domain.model.Proposal;
 import marchtue.reuse.trade.domain.repository.FavPostRepository;
 import marchtue.reuse.trade.domain.repository.PostImageRepository;
 import marchtue.reuse.trade.domain.repository.PostRepository;
-import marchtue.reuse.trade.domain.repository.ProposalRepository;
 import marchtue.reuse.trade.exception.BusinessException;
 import marchtue.reuse.trade.exception.ErrorCode;
 import marchtue.reuse.trade.global.dto.ApiResponse;
@@ -39,6 +39,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -138,43 +139,34 @@ public class PostService {
         .map(PostImage::getImageLink)
         .toList();
     ReadProductResponse postInfo = ReadProductResponse.from(post, images, isFav);
+    if (sellerId.equals(currentId) && post.getPostState().equals(PostStateEnum.IN_PROGRESS)) {
 
-    if (sellerId.equals(currentId)) {
-      if (post.getPostState() == PostStateEnum.IN_PROGRESS) {
-        List<Proposal> proposalList = post.getProposals();
-        List<UUID> userIds = proposalList.stream()
-            .map(Proposal::getCreatedBy)
-            .distinct()
-            .toList();
+      List<Proposal> proposalList = post.getProposals();
+      List<UUID> userIds = proposalList.stream()
+          .map(Proposal::getCreatedBy)
+          .distinct()
+          .toList();
 
-        List<BuyerInfoResponse> userInfos = userClient.getBuyerInfoList(userIds);
-        Map<UUID, BuyerInfoResponse> buyerInfoMap = userInfos.stream()
-            .collect(Collectors.toMap(BuyerInfoResponse::userId, Function.identity()));
+      List<BuyerInfoResponse> userInfos = userClient.getBuyerInfoList(userIds);
+      Map<UUID, BuyerInfoResponse> buyerInfoMap = userInfos.stream()
+          .collect(Collectors.toMap(BuyerInfoResponse::userId, Function.identity()));
 
-        List<ProposalListResponse> buyerInfoList = proposalList.stream()
-            .map(proposal -> {
-              BuyerInfoResponse userInfo = buyerInfoMap.get(proposal.getCreatedBy());
-              String nickname = userInfo != null ? userInfo.nickname() : null;
-              String profile = userInfo != null ? userInfo.profile() : null;
-              return ProposalListResponse.from(proposal, nickname, profile);
-            })
-            .toList();
+      List<ProposalListResponse> buyerInfoList = proposalList.stream()
+          .map(proposal -> {
+            BuyerInfoResponse userInfo = buyerInfoMap.get(proposal.getCreatedBy());
+            String nickname = userInfo != null ? userInfo.nickname() : null;
+            String profile = userInfo != null ? userInfo.profile() : null;
+            return ProposalListResponse.from(proposal, nickname, profile);
+          })
+          .toList();
 
-        SellerInProposalsResponse res = new SellerInProposalsResponse(postInfo, sellerInfo,
-            buyerInfoList);
+      SellerInProposalsResponse res = new SellerInProposalsResponse(postInfo, sellerInfo,
+          buyerInfoList);
 
-        return ApiResponse.ok(res);
-
-      } else if (post.getPostState() == PostStateEnum.TRADING) {
-        String buyserAdd =
-      }
-
-    } else {
-      ReadPostResponse res = new ReadPostResponse(postInfo, sellerInfo);
       return ApiResponse.ok(res);
     }
-
-    return null;
+    ReadPostResponse res = new ReadPostResponse(postInfo, sellerInfo);
+    return ApiResponse.ok(res);
 
   }
 

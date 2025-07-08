@@ -7,7 +7,7 @@ import marchtue.reuse.user.domain.model.User;
 import marchtue.reuse.user.domain.model.UserRating;
 
 public record ReadSellerResponse(
-    UUID serllerId,
+    UUID sellerId,
     String profile,
     String nickname,
     LocalDateTime createdAt,

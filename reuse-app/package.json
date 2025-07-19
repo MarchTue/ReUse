@@ -12,8 +12,9 @@
     "test:watch": "jest --watch",
     "test-log": "npx jest --runInBand --verbose",
     "test-watch-log": "npx jest --runInBand --verbose --watch",
-    "changelog:gen" : "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "release" : "standard-version"
+    "changelog:gen": "DEBUG=\"conventional-changelog*\" conventional-changelog -c ./.conventional-changelog-config.js -o CHANGELOG.md --tag-prefix v",
+    "release": "DEBUG=\"conventional-changelog*,@semantic-release/git*\" standard-version --no-verify",
+    "release2": "echo \"Consider using 'npm run changelog:gen' instead for custom changelog generation.\" && exit 1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

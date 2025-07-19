@@ -72,3 +72,12 @@ add configs.
 3. Create `Manifest.json`
 4. Add package : `tailwindcss-animate`
 
+## 0.2.0
+2025.06.22
+
+@YooByWk
+
+1. Create `auth.ts` : Auth store 
+2. Create `Validation.ts` : zod
+3. Tailwind CSS apply
+4. Create `Onboarding` page.

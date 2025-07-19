@@ -1,6 +1,6 @@
 {
   "name": "reuse-app",
-  "version": "0.4.0",
+  "version": "0.4.",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -12,9 +12,6 @@
     "test:watch": "jest --watch",
     "test-log": "npx jest --runInBand --verbose",
     "test-watch-log": "npx jest --runInBand --verbose --watch",
-    "changelog:gen": "DEBUG=\"conventional-changelog*\" conventional-changelog -c ./.conventional-changelog-config.js -o CHANGELOG.md --tag-prefix v",
-    "release": "DEBUG=\"conventional-changelog*,@semantic-release/git*\" standard-version --no-verify",
-    "release2": "echo \"Consider using 'npm run changelog:gen' instead for custom changelog generation.\" && exit 1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -65,7 +62,6 @@
     "@types/node": "^20.19.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "conventional-changelog-cli": "^5.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "eslint-config-prettier": "^10.1.5",
@@ -73,7 +69,6 @@
     "jest-environment-jsdom": "^30.0.4",
     "postcss": "8.5",
     "prettier": "^3.5.3",
-    "standard-version": "^9.5.0",
     "tailwindcss": "^3.4.17",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",

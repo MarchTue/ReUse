@@ -1,6 +1,6 @@
 {
   "name": "reuse-app",
-  "version": "0.4.",
+  "version": "0.4.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -12,6 +12,7 @@
     "test:watch": "jest --watch",
     "test-log": "npx jest --runInBand --verbose",
     "test-watch-log": "npx jest --runInBand --verbose --watch",
+    "release": "bash ./release.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

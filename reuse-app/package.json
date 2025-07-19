@@ -11,7 +11,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test-log": "npx jest --runInBand --verbose",
-    "test-watch-log": "npx jest --runInBand --verbose --watch"
+    "test-watch-log": "npx jest --runInBand --verbose --watch",
+    "changelog:gen" : "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "release" : "standard-version"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

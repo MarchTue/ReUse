@@ -12,14 +12,17 @@ import marchtue.reuse.trade.application.client.UserClient;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
 import marchtue.reuse.trade.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.trade.application.dto.response.CreatePostResponse;
+import marchtue.reuse.trade.application.dto.response.InTradingPostResponse;
+import marchtue.reuse.trade.application.dto.response.InprogressPostResponse;
+import marchtue.reuse.trade.application.dto.response.InternalBuyerInfoResponse;
 import marchtue.reuse.trade.application.dto.response.ProposalListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostResponse;
 import marchtue.reuse.trade.application.dto.response.ReadProductResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
-import marchtue.reuse.trade.application.dto.response.SellerInProposalsResponse;
 import marchtue.reuse.trade.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
+import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
 import marchtue.reuse.trade.domain.model.Category;
 import marchtue.reuse.trade.domain.model.Post;
 import marchtue.reuse.trade.domain.model.PostImage;
@@ -27,6 +30,7 @@ import marchtue.reuse.trade.domain.model.Proposal;
 import marchtue.reuse.trade.domain.repository.FavPostRepository;
 import marchtue.reuse.trade.domain.repository.PostImageRepository;
 import marchtue.reuse.trade.domain.repository.PostRepository;
+import marchtue.reuse.trade.domain.repository.ProposalRepository;
 import marchtue.reuse.trade.exception.BusinessException;
 import marchtue.reuse.trade.exception.ErrorCode;
 import marchtue.reuse.trade.global.dto.ApiResponse;
@@ -46,6 +50,7 @@ public class PostService {
 
   private final PostRepository postRepository;
   private final FavPostRepository favPostRepository;
+  private final ProposalRepository proposalRepository;
   private final CategoryService categoryService;
   private final PostImageRepository postImageRepository;
   private final UserClient userClient;
@@ -139,32 +144,41 @@ public class PostService {
         .map(PostImage::getImageLink)
         .toList();
     ReadProductResponse postInfo = ReadProductResponse.from(post, images, isFav);
-    if (sellerId.equals(currentId) && post.getPostState().equals(PostStateEnum.IN_PROGRESS)) {
+    if (sellerId.equals(currentId)) {
+      if (post.getPostState().equals(PostStateEnum.IN_PROGRESS)) {
 
-      List<Proposal> proposalList = post.getProposals();
-      List<UUID> userIds = proposalList.stream()
-          .map(Proposal::getCreatedBy)
-          .distinct()
-          .toList();
+        List<Proposal> proposalList = post.getProposals();
+        List<UUID> userIds = proposalList.stream()
+            .map(Proposal::getCreatedBy)
+            .distinct()
+            .toList();
 
-      List<BuyerInfoResponse> userInfos = userClient.getBuyerInfoList(userIds);
-      Map<UUID, BuyerInfoResponse> buyerInfoMap = userInfos.stream()
-          .collect(Collectors.toMap(BuyerInfoResponse::userId, Function.identity()));
+        List<InternalBuyerInfoResponse> userInfos = userClient.getBuyerInfoList(userIds);
+        Map<UUID, InternalBuyerInfoResponse> buyerInfoMap = userInfos.stream()
+            .collect(Collectors.toMap(InternalBuyerInfoResponse::userId, Function.identity()));
 
-      List<ProposalListResponse> buyerInfoList = proposalList.stream()
-          .map(proposal -> {
-            BuyerInfoResponse userInfo = buyerInfoMap.get(proposal.getCreatedBy());
-            String nickname = userInfo != null ? userInfo.nickname() : null;
-            String profile = userInfo != null ? userInfo.profile() : null;
-            return ProposalListResponse.from(proposal, nickname, profile);
-          })
-          .toList();
+        List<ProposalListResponse> buyerInfoList = proposalList.stream()
+            .map(proposal -> {
+              InternalBuyerInfoResponse userInfo = buyerInfoMap.get(proposal.getCreatedBy());
+              String nickname = userInfo != null ? userInfo.nickname() : null;
+              String profile = userInfo != null ? userInfo.profile() : null;
+              return ProposalListResponse.from(proposal, nickname, profile);
+            })
+            .toList();
 
-      SellerInProposalsResponse res = new SellerInProposalsResponse(postInfo, sellerInfo,
-          buyerInfoList);
+        InprogressPostResponse res = new InprogressPostResponse(postInfo, sellerInfo,
+            buyerInfoList);
 
-      return ApiResponse.ok(res);
+        return ApiResponse.ok(res);
+      } else {
+        Proposal acceptedProposal = findAcceptedProposal(postId);
+        // 거래 중, 거래 완료
+        BuyerInfoResponse buyerInfo = BuyerInfoResponse.from(acceptedProposal);
+        InTradingPostResponse response = new InTradingPostResponse(postInfo, sellerInfo, buyerInfo);
+        return ApiResponse.ok(response);
+      }
     }
+
     ReadPostResponse res = new ReadPostResponse(postInfo, sellerInfo);
     return ApiResponse.ok(res);
 
@@ -174,5 +188,9 @@ public class PostService {
   private Post findById(UUID postId) {
     return postRepository.findById(postId)
         .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
+  }
+
+  private Proposal findAcceptedProposal(UUID postId) {
+    return proposalRepository.findByPostIdAndState(postId, ProposalStateEnum.ACCEPTED);
   }
 }

@@ -1,9 +1,11 @@
 package marchtue.reuse.trade.application.dto.response;
 
+import java.util.UUID;
 import marchtue.reuse.trade.domain.enums.ProposalTradeTypeEnum;
 import marchtue.reuse.trade.domain.model.Proposal;
 
 public record ProposalListResponse(
+    UUID proposalId,
     String nickname,
     String profile,
     long price,
@@ -12,6 +14,7 @@ public record ProposalListResponse(
 
   public static ProposalListResponse from(Proposal proposal, String nickname, String profile) {
     return new ProposalListResponse(
+        proposal.getId(),
         nickname,
         profile,
         proposal.getPrice(),

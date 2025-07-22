@@ -1,7 +1,7 @@
 package marchtue.reuse.user.application.dto.response;
 
 public record UserInfoWithImgResponse(
-    String userId,
+    java.util.UUID userId,
     String nickname,
     String profile
 ) {

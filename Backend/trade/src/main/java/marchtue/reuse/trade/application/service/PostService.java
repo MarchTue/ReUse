@@ -210,6 +210,11 @@ public class PostService {
         .limit(pageable.getPageSize())
         .fetch();
 
+    if (pagedPosts.isEmpty()) {
+      Page<SearchPostListResponse> emptyPage = new PageImpl<>(List.of(), pageable, 0);
+      return ApiResponse.ok(PaginatedResponse.of(emptyPage));
+    }
+
     long total = Optional.ofNullable(
         queryFactory
             .select(post.count())

@@ -224,7 +224,7 @@ public class UserService {
         .filter(Optional::isPresent)
         .map(Optional::get)
         .map(user -> new UserInfoWithImgResponse(
-            String.valueOf(user.getId()),
+            user.getId(),
             user.getNickname(),
             user.getProfileImage()))
         .toList();

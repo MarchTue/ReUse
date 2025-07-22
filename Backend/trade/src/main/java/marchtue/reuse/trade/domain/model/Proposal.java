@@ -44,4 +44,20 @@ public class Proposal extends BaseEntityNonUpdated {
 
   @OneToOne(mappedBy = "proposal")
   private Trade trade;
+
+  public static Proposal create(
+      ProposalTradeTypeEnum type,
+      long price,
+      String address,
+      ProposalStateEnum state,
+      Post post
+  ) {
+    return new Proposal().builder()
+        .type(type)
+        .price(price)
+        .address(address)
+        .state(state)
+        .post(post)
+        .build();
+  }
 }

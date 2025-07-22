@@ -7,4 +7,6 @@ import marchtue.reuse.trade.domain.model.Proposal;
 public interface ProposalRepository {
 
   Proposal findByPostIdAndState(UUID postId, ProposalStateEnum proposalStateEnum);
+
+  Proposal save(Proposal proposal);
 }

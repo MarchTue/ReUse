@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import marchtue.reuse.trade.application.dto.response.InternalBuyerInfoResponse;
+import marchtue.reuse.trade.application.dto.response.InternalUserInfoWithImgResponse;
+import marchtue.reuse.trade.application.dto.response.InternalUserSimpleInfoResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
-import marchtue.reuse.trade.application.dto.response.UserSimpleInfoResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,12 @@ public class UserClientImpl implements UserClient {
   }
 
   @Override
-  public List<UserSimpleInfoResponse> getUserInfoList(List<UUID> userIds) {
+  public List<InternalUserSimpleInfoResponse> getUserInfoList(List<UUID> userIds) {
     String url = "http://user-service:19091/internal/users/info-list";
     HttpEntity<List<UUID>> request = new HttpEntity<>(userIds);
-    ResponseEntity<UserSimpleInfoResponse[]> response = restTemplate.postForEntity(url, request,
-        UserSimpleInfoResponse[].class);
+    ResponseEntity<InternalUserSimpleInfoResponse[]> response = restTemplate.postForEntity(url,
+        request,
+        InternalUserSimpleInfoResponse[].class);
     return Arrays.asList(Objects.requireNonNull(response.getBody()));
   }
 
@@ -48,4 +50,13 @@ public class UserClientImpl implements UserClient {
     return Arrays.asList(Objects.requireNonNull(response.getBody()));
   }
 
+  @Override
+  public List<InternalUserInfoWithImgResponse> getUserInfoListWithProfile(List<UUID> userIds) {
+    String url = "http://user-service:19091/internal/users/post-infos";
+    HttpEntity<List<UUID>> request = new HttpEntity<>(userIds);
+    ResponseEntity<InternalUserInfoWithImgResponse[]> response = restTemplate.postForEntity(url,
+        request,
+        InternalUserInfoWithImgResponse[].class);
+    return Arrays.asList(Objects.requireNonNull(response.getBody()));
+  }
 }

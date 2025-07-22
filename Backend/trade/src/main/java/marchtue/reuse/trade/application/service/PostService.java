@@ -1,8 +1,12 @@
 package marchtue.reuse.trade.application.service;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -15,18 +19,21 @@ import marchtue.reuse.trade.application.dto.response.CreatePostResponse;
 import marchtue.reuse.trade.application.dto.response.InTradingPostResponse;
 import marchtue.reuse.trade.application.dto.response.InprogressPostResponse;
 import marchtue.reuse.trade.application.dto.response.InternalBuyerInfoResponse;
+import marchtue.reuse.trade.application.dto.response.InternalUserInfoWithImgResponse;
+import marchtue.reuse.trade.application.dto.response.InternalUserSimpleInfoResponse;
 import marchtue.reuse.trade.application.dto.response.ProposalListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostResponse;
 import marchtue.reuse.trade.application.dto.response.ReadProductResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
-import marchtue.reuse.trade.application.dto.response.UserSimpleInfoResponse;
+import marchtue.reuse.trade.application.dto.response.SearchPostListResponse;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
 import marchtue.reuse.trade.domain.model.Category;
 import marchtue.reuse.trade.domain.model.Post;
 import marchtue.reuse.trade.domain.model.PostImage;
 import marchtue.reuse.trade.domain.model.Proposal;
+import marchtue.reuse.trade.domain.model.QPost;
 import marchtue.reuse.trade.domain.repository.FavPostRepository;
 import marchtue.reuse.trade.domain.repository.PostImageRepository;
 import marchtue.reuse.trade.domain.repository.PostRepository;
@@ -37,11 +44,13 @@ import marchtue.reuse.trade.global.dto.ApiResponse;
 import marchtue.reuse.trade.global.dto.PaginatedResponse;
 import marchtue.reuse.trade.global.util.RequestUtil;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Slf4j
 @Service
@@ -51,6 +60,7 @@ public class PostService {
   private final PostRepository postRepository;
   private final FavPostRepository favPostRepository;
   private final ProposalRepository proposalRepository;
+  private final JPAQueryFactory queryFactory;
   private final CategoryService categoryService;
   private final PostImageRepository postImageRepository;
   private final UserClient userClient;
@@ -106,15 +116,15 @@ public class PostService {
         .distinct()
         .toList();
 
-    List<UserSimpleInfoResponse> userInfos = userClient.getUserInfoList(userIds);
-    Map<UUID, UserSimpleInfoResponse> userInfoMap = userInfos.stream()
-        .collect(Collectors.toMap(UserSimpleInfoResponse::userId, Function.identity()));
+    List<InternalUserSimpleInfoResponse> userInfos = userClient.getUserInfoList(userIds);
+    Map<UUID, InternalUserSimpleInfoResponse> userInfoMap = userInfos.stream()
+        .collect(Collectors.toMap(InternalUserSimpleInfoResponse::userId, Function.identity()));
 
     UUID currentUserId = RequestUtil.getCurrentUserId();
 
     List<ReadPostListResponse> content = posts.stream()
         .map(post -> {
-          UserSimpleInfoResponse userInfo = userInfoMap.get(post.getCreatedBy());
+          InternalUserSimpleInfoResponse userInfo = userInfoMap.get(post.getCreatedBy());
           String nickname = userInfo != null ? userInfo.nickname() : null;
           BigDecimal rating = userInfo != null ? userInfo.rating() : null;
           boolean isFav = favPostRepository.existsByUserIdAndPostId(currentUserId, post.getId());
@@ -182,6 +192,63 @@ public class PostService {
     ReadPostResponse res = new ReadPostResponse(postInfo, sellerInfo);
     return ApiResponse.ok(res);
 
+  }
+
+  public ApiResponse searchPosts(String keyword, Pageable pageable) {
+    QPost post = QPost.post;
+
+    BooleanExpression condition = StringUtils.hasText(keyword)
+        ? post.title.containsIgnoreCase(keyword)
+        .or(post.content.containsIgnoreCase(keyword))
+        : null;
+
+    List<Post> pagedPosts = queryFactory
+        .selectFrom(post)
+        .where(condition)
+        .orderBy(post.createdAt.desc(), post.id.desc())
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
+
+    long total = Optional.ofNullable(
+        queryFactory
+            .select(post.count())
+            .from(post)
+            .where(condition)
+            .fetchOne()
+    ).orElse(0L);
+
+    List<UUID> userIds = pagedPosts.stream()
+        .map(Post::getCreatedBy)
+        .distinct()
+        .toList();
+
+    List<InternalUserInfoWithImgResponse> userInfos =
+        userClient.getUserInfoListWithProfile(userIds);
+
+    Map<UUID, InternalUserInfoWithImgResponse> userInfoMap = userInfos.stream()
+        .collect(Collectors.toMap(InternalUserInfoWithImgResponse::userId, Function.identity()));
+
+    UUID currentUserId = RequestUtil.getCurrentUserId();
+    Set<UUID> postIds = pagedPosts.stream()
+        .map(Post::getId)
+        .collect(Collectors.toSet());
+
+    Set<UUID> favPostIds = favPostRepository
+        .findPostIdsByUserIdAndPostIdIn(currentUserId, postIds);
+
+    List<SearchPostListResponse> content = pagedPosts.stream()
+        .map(p -> {
+          InternalUserInfoWithImgResponse ui = userInfoMap.get(p.getCreatedBy());
+          String nickname = ui != null ? ui.nickname() : null;
+          String profile = ui != null ? ui.profile() : null;
+          boolean isFav = favPostIds.contains(p.getId());
+          return SearchPostListResponse.from(p, nickname, profile, isFav);
+        })
+        .toList();
+
+    Page<SearchPostListResponse> page = new PageImpl<>(content, pageable, total);
+    return ApiResponse.ok(PaginatedResponse.of(page));
   }
 
 

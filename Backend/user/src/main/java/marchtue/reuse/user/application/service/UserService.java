@@ -13,6 +13,7 @@ import marchtue.reuse.user.application.dto.request.UserAddInfoRequest;
 import marchtue.reuse.user.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.user.application.dto.response.MypageResponse;
 import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
+import marchtue.reuse.user.application.dto.response.UserInfoWithImgResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.domain.enums.UserRoleEnum;
 import marchtue.reuse.user.domain.model.Credential;
@@ -213,10 +214,22 @@ public class UserService {
             user.getProfileImage()))
         .toList();
 
-    log.info("userInfos: {}", userInfos);
     return userInfos;
   }
 
+  public List<UserInfoWithImgResponse> getPostInfoList(List<UUID> userIds) {
+
+    List<UserInfoWithImgResponse> userInfos = userIds.stream()
+        .map(userRepository::findById)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(user -> new UserInfoWithImgResponse(
+            user.getId(),
+            user.getNickname(),
+            user.getProfileImage()))
+        .toList();
+    return userInfos;
+  }
 
   private User findByNickname(String nickname) {
     return userRepository.findByNickname(nickname.toLowerCase());
@@ -252,6 +265,4 @@ public class UserService {
         .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
         .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
   }
-
-
 }

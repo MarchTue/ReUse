@@ -27,9 +27,6 @@ public class JwtUtil {
   public static final String REFRESH_TOKEN_COOKIE = "Refresh_Token";
   public static final String BEARER_PREFIX = "Bearer ";
 
-  private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15;
-  private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 3;
-
   @Value("${jwt.secret.key}")
   private String secretKey;
 
@@ -84,7 +81,7 @@ public class JwtUtil {
         .getBody();
   }
 
-  
+
   public UserRoleEnum getUserRole(String token) {
     Claims claims = getUserInfoFromToken(token);
     String role = claims.get("role", String.class);

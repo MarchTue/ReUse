@@ -9,6 +9,7 @@ import marchtue.reuse.user.application.dto.request.UserInfoRequest;
 import marchtue.reuse.user.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.user.application.dto.response.ReadSellerResponse;
 import marchtue.reuse.user.application.dto.response.UserInfoResponse;
+import marchtue.reuse.user.application.dto.response.UserInfoWithImgResponse;
 import marchtue.reuse.user.application.dto.response.UserSimpleInfoResponse;
 import marchtue.reuse.user.application.service.UserService;
 import marchtue.reuse.user.domain.model.User;
@@ -66,5 +67,12 @@ public class UserInternalController {
       @RequestBody List<UUID> userIds) {
     return userService.getBuyerInfoList(userIds);
   }
+
+  @PostMapping("/post-infos")
+  public List<UserInfoWithImgResponse> getPostInfoList(
+      @RequestBody List<UUID> userIds) {
+    return userService.getPostInfoList(userIds);
+  }
+
 
 }

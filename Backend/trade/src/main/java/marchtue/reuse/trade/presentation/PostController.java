@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
 import marchtue.reuse.trade.application.service.PostService;
 import marchtue.reuse.trade.global.dto.ApiResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +47,14 @@ public class PostController {
       @PathVariable UUID postId
   ) {
     return postService.readPost(postId);
+  }
+
+  // 게시글 검색
+  @GetMapping("/search")
+  public ApiResponse searchPosts(
+      @RequestParam("keyword") String keyword,
+      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+  ) {
+    return postService.searchPosts(keyword, pageable);
   }
 }

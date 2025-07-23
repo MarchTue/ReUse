@@ -60,4 +60,19 @@ public class Proposal extends BaseEntityNonUpdated {
         .post(post)
         .build();
   }
+
+  public void acceptProposal(
+  ) {
+    this.state = ProposalStateEnum.ACCEPTED;
+  }
+
+  public void cancelProposal(
+  ) {
+    this.state = ProposalStateEnum.CANCLED;
+  }
+
+  public void rejectProposal(
+  ) {
+    this.state = ProposalStateEnum.REJECTED;
+  }
 }

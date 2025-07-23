@@ -93,4 +93,10 @@ public class Post extends BaseEntity {
         .postImages(postImages)
         .build();
   }
+
+  public void updatePostState(
+      PostStateEnum postStateEnum
+  ) {
+    this.postState = postStateEnum;
+  }
 }

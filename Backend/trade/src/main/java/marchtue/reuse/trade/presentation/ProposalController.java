@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import marchtue.reuse.trade.application.dto.request.CreateProposalRequest;
 import marchtue.reuse.trade.application.service.ProposalService;
 import marchtue.reuse.trade.global.dto.ApiResponse;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,13 @@ public class ProposalController {
       @Valid @RequestBody CreateProposalRequest req
   ) {
     return proposalService.createProposal(postId, req);
+  }
+
+  @GetMapping("/accept/{proposalId}")
+  public ApiResponse accceptProposal(
+      @PathVariable UUID proposalId
+  ) {
+    return proposalService.acceptProposal(proposalId);
   }
 
 }

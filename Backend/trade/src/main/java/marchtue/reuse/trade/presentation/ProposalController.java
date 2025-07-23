@@ -36,4 +36,10 @@ public class ProposalController {
     return proposalService.acceptProposal(proposalId);
   }
 
+  @GetMapping("/reject/{proposalId}")
+  public ApiResponse rejectProposal(
+      @PathVariable UUID proposalId
+  ) {
+    return proposalService.rejectProposal(proposalId);
+  }
 }

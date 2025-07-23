@@ -81,7 +81,27 @@ public class ProposalService {
     return ApiResponse.ok(res);
   }
 
+  public ApiResponse rejectProposal(UUID proposalId) {
+    Proposal proposal = findById(proposalId);
+    Post post = proposal.getPost();
+    if (!post.getPostState().equals(PostStateEnum.TRADING)) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    UUID currentId = RequestUtil.getCurrentUserId();
+    if (!post.getCreatedBy().equals(currentId)) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    if (proposal.getState().equals(ProposalStateEnum.CANCLED)) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    proposal.rejectProposal();
+    proposalRepository.save(proposal);
+    return ApiResponse.ok();
+  }
+
   public Proposal findById(UUID proposalId) {
     return proposalRepository.findById(proposalId).orElse(null);
   }
+
+
 }

@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 
 // import "@openzeppelin/contracts/utils/Context.sol";
 
@@ -13,7 +14,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
  * 원화(KRW)와 1:1 매칭을 위한 decimals : 0으로 설정
  * 컨트랙트의 소유자만이 추가 토큰을 발행 할 수 있습니다.
  */
-contract MyToken is ERC20, AccessControl {
+contract MyToken is ERC20, AccessControl, ERC20Permit {
     event Minted(address indexed to, uint256 amount);
     event Burned(address indexed from, uint256 amount);
 
@@ -34,12 +35,13 @@ contract MyToken is ERC20, AccessControl {
     )
         // address[] memory admins
         ERC20(name, symbol)
+        ERC20Permit(name)
     {
         _grantRole(ADMIN_ROLE, _msgSender());
-        _setRoleAdmin(DEFAULT_ADMIN_ROLE, ADMIN_ROLE);
+        // _setRoleAdmin(DEFAULT_ADMIN_ROLE, ADMIN_ROLE);
         _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _mint(msg.sender, initialSupply);
-        emit Minted(msg.sender, initialSupply);
+        _mint(_msgSender(), initialSupply);
+        emit Minted(_msgSender(), initialSupply);
         decimals();
     }
 

@@ -100,10 +100,22 @@ contract Escrow is AccessControl {
         bytes32 proposalId
     );
     event EscrowFinalized(uint256 indexed escrowId, bytes32 proposalId);
+    
+    /**
+     * @dev 배송 정보 업데이트에 관한 이벤트
+     * @param escrowId 블록체인에서 부여될 에스크로의 ID
+     * @param trackingNumber 운송장번호
+     * @param courier 배송사
+     * @param status 배송 상태 - 배송상태는 회사별로 다를 것으로 예상되어 enum 구조화는 진행하지 아니하였소.
+     * @param location 배송 현재 위치 - 단 최대한 짧게 유지해야 함
+     * @param lastUpdated  마지막 수정 시각
+     * @param proposalId  백엔드에서 사용할 제안과 관련된 ID (변경 가능) 
+     */
     event DeliveryDetailsUpdated(
         uint256 indexed escrowId,
         string trackingNumber,
         string courier,
+        string status,
         string location,
         uint256 lastUpdated,
         bytes32 proposalId
@@ -209,7 +221,9 @@ contract Escrow is AccessControl {
             currentEscrowId,
             unicode"", // 초기 운송장 번호 없음
             unicode"", // 초기 택배사 정보 없음
-            unicode"상품 준비 중",
+            unicode"상품 준비 중", // status
+            // location
+            "",
             block.timestamp,
             _proposalId
         );
@@ -252,7 +266,8 @@ contract Escrow is AccessControl {
             _escrowId,
             _trackingNumber,
             _courier,
-            "",
+            escrow.deliveryDetails.status,
+            escrow.deliveryDetails.location,
             block.timestamp,
             _proposalId
         );
@@ -316,13 +331,12 @@ contract Escrow is AccessControl {
             _escrowId,
             _trackingNumber,
             _courier,
+            escrow.deliveryDetails.status,
             _location,
             block.timestamp,
             _proposalId
         );
     }
-
-    // 분쟁 부분은 보류합니다.
 
     // 구매자가 직접 대금을 정산
     function claimFunds(uint256 _escrowId, bytes32 _proposalId) public {
@@ -403,5 +417,37 @@ contract Escrow is AccessControl {
         escrow.status = EscrowStatus.CANCELED; // 상태를 CANCELED로 변경
         IERC20(escrow.tokenAddress).transfer(escrow.buyer, escrow.amount); // 구매자에게 토큰 환불
         emit FundsRefunded(_escrowId, escrow.buyer, escrow.amount, _proposalId);
+    }
+
+    // 분쟁 부분은 보류합니다.
+
+    /**
+     *  @dev 관리자 역할에 해당하는 계정이, ORACLE_ROLE 을 부여하는 기능
+     *  @dev 해당 기능은 추후 확장성을 고려한 관리적 성격의 구현입니다.
+     *  @param _address : ORACLE_ROLE을 부여받을 address
+     *  */
+    function grantOracleRole(
+        address _address
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(
+            _address != address(0),
+            "Danger! : Oracle address cannot be zero."
+        );
+        _grantRole(ORACLE_ROLE, _address);
+    }
+
+    /**
+     * @dev ORACLE_ROLE에 대한 권한을 회수하는 함수
+     * @dev 관리자 권한 必, 추후 확장성을 고려한 관리적 성격의 구현
+     * @param _address : ORACLE_ROLE을 회수할 address
+     */
+    function revokeOracleRole(
+        address _address
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(
+            _account != address(0),
+            "Danger! : Cannot revoke 0x0 address' Role"
+        );
+        _revokeRole(ORACLE_ROLE, _address);
     }
 }

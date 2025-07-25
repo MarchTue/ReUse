@@ -215,4 +215,68 @@ contract Escrow is AccessControl {
 
         return (currentEscrowId, _proposalId);
     } // deposit
+
+    // 백엔드 오라클 -> 상태 변경
+    function confirmDeliveryStatus(
+        uint256 _escrowId,
+        bool _isConfirmed,
+        bytes32 _proposalId
+    ) public onlyRole(ORACLE_ROLE) {
+        EscrowInfo storage escrow = escrows[_escrowId];
+
+        require(
+            escrow.status == EscrowStatus.DELIVERED ||
+                escrow.status == EscrowStatus.DEPOSIT
+        );
+
+        if (_isConfirmed && escrow.status != EscrowStatus.DELIVERED) {
+            escrow.status = EscrowStatus.DELIVERED;
+            escrow.deliveryConfirmTime = block.timestamp;
+        }
+
+        emit DeliveryStatusUpdated(
+            _escrowId,
+            _isConfirmed,
+            block.timestamp,
+            _proposalId
+        );
+    }
+
+    // 배송정보 업데이트
+    function updateDeliveryDetails(
+        uint256 _escrowId,
+        string memory _trackingNumber,
+        string memory _courier,
+        string memory _currentStatus,
+        string memory _location,
+        bytes32 _proposalId
+    ) public onlyRole(ORACLE_ROLE) {
+        EscrowInfo storage escrow = escrows[_escrowId];
+
+        require(
+            escrow.status != EscrowStatus.COMPLETED &&
+                escrow.status != EscrowStatus.RELEASE &&
+                escrow.status != EscrowStatus.CANCELED,
+            "Escrow : Cannot update delivery details for finalized or canceled escrow"
+        );
+
+        escrow.deliveryDetails.trackingNumber = _trackingNumber;
+        escrow.deliveryDetails.courier = _courier;
+        escrow.deliveryDetails.currentStatus = _currentStatus;
+        escrow.deliveryDetails.location = _location;
+        escrow.deliveryDetails.lastUpdated = block.timestamp;
+
+        emit DeliveryDetailsUpdated(
+            _escrowId,
+            _trackingNumber,
+            _courier,
+            _location,
+            block.timestamp,
+            _proposalId
+        );
+    }
+    
+    // 분쟁 부분은 보류합니다.
+    
+    
 }

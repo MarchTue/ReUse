@@ -43,4 +43,15 @@ public class Trade extends BaseEntity {
   @OneToOne
   @JoinColumn(name = "proposal_id", nullable = false)
   private Proposal proposal;
+
+  public static Trade create(
+      TradeTypeEnum type,
+      Proposal proposal
+  ) {
+    return new Trade().builder()
+        .type(type)
+        .state(TradeStateEnum.PENDING)
+        .proposal(proposal)
+        .build();
+  }
 }

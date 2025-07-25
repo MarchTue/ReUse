@@ -257,7 +257,7 @@ public class PostService {
   }
 
 
-  private Post findById(UUID postId) {
+  public Post findById(UUID postId) {
     return postRepository.findById(postId)
         .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));
   }

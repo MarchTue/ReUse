@@ -10,7 +10,8 @@ public enum ErrorCode {
   Duplicated(400, "already exist"),
   NOT_FOUND(404, "not found"),
   TRADE_WAY_ERROR(400, "parcel/direct error"),
-  DIRECT_ADDRESS(400, "direct address is null");
+  DIRECT_ADDRESS(400, "direct address is null"),
+  BAD_REQUEST(400, "bad request");
 
   private final int code;
   private final String message;

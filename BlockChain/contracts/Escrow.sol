@@ -11,6 +11,7 @@ contract Escrow is AccessControl {
 
     enum EscrowStatus {
         DEPOSIT,
+        DELIVERING,
         DELIVERED,
         COMPLETED,
         RELEASE,
@@ -216,7 +217,53 @@ contract Escrow is AccessControl {
         return (currentEscrowId, _proposalId);
     } // deposit
 
-    // 백엔드 오라클 -> 상태 변경
+    /**
+     * @dev 판매자 또는 오라클이 상품 배송을 시작했음을 알리고 에스크로 상태를 DELIVERING으로 변경.
+     * @param _escrowId 해당 에스크로 ID
+     * @param _trackingNumber 운송장 번호
+     * @param _courier 택배사 이름
+     * @param _proposalId 백엔드 제안 ID
+     */
+    function startDelivery(
+        uint256 _escrowId,
+        string memory _trackingNumber,
+        string memory _courier,
+        bytes32 _proposalId
+    ) public {
+        EscrowInfo storage escrow = escrows[_escrowId];
+        require(
+            _msgSender() == escrow.seller || hasRole(ORACLE_ROLE, _msgSender()),
+            "Escrow: Only seller or oracle can start delivery"
+        );
+        require(
+            escrow.status == EscrowStatus.DEPOSIT,
+            "Escrow: Can only start delivery from DEPOSIT state"
+        );
+
+        escrow.status = EscrowStatus.DELIVERING;
+
+        escrow.deliveryDetails.trackingNumber = _trackingNumber;
+        escrow.deliveryDetails.courier = _courier;
+        escrow.deliveryDetails.lastUpdated = block.timestamp;
+        escrow.deliveryDetails.location = "";
+        escrow.deliveryDetails.currentStatus = unicode"배송 중";
+
+        emit DeliveryDetailsUpdated(
+            _escrowId,
+            _trackingNumber,
+            _courier,
+            "",
+            block.timestamp,
+            _proposalId
+        );
+    }
+
+    /**
+     * @dev 오라클이 배달 완료 상태를 최종적으로 확인하고 에스크로 상태를 DELIVERED로 변경.
+     * @param _escrowId 해당 에스크로 ID
+     * @param _isConfirmed 배달 완료 여부 (true여야 함)
+     * @param _proposalId 백엔드 제안 ID
+     */
     function confirmDeliveryStatus(
         uint256 _escrowId,
         bool _isConfirmed,
@@ -225,14 +272,13 @@ contract Escrow is AccessControl {
         EscrowInfo storage escrow = escrows[_escrowId];
 
         require(
-            escrow.status == EscrowStatus.DELIVERED ||
-                escrow.status == EscrowStatus.DEPOSIT
+            escrow.status == EscrowStatus.DELIVERING,
+            "Escrow: Can only confirm delivery status from DELIVERING state"
         );
+        require(_isConfirmed, "Escrow: Delivery confirmation must be true");
 
-        if (_isConfirmed && escrow.status != EscrowStatus.DELIVERED) {
-            escrow.status = EscrowStatus.DELIVERED;
-            escrow.deliveryConfirmTime = block.timestamp;
-        }
+        escrow.status = EscrowStatus.DELIVERED;
+        escrow.deliveryConfirmTime = block.timestamp;
 
         emit DeliveryStatusUpdated(
             _escrowId,
@@ -275,8 +321,87 @@ contract Escrow is AccessControl {
             _proposalId
         );
     }
-    
+
     // 분쟁 부분은 보류합니다.
-    
-    
+
+    // 구매자가 직접 대금을 정산
+    function claimFunds(uint256 _escrowId, bytes32 _proposalId) public {
+        EscrowInfo storage escrow = escrows[_escrowId];
+        require(_msgSender() == escrow.buyer);
+        require(escrow.status == EscrowStatus.DELIVERED);
+        require(!escrow.raisedDispute);
+
+        escrow.status = EscrowStatus.COMPLETED;
+        IERC20(escrow.tokenAddress).transfer(escrow.seller, escrow.amount);
+        emit FundsReleased(
+            _escrowId,
+            escrow.seller,
+            escrow.amount,
+            _proposalId
+        );
+    }
+
+    // 누구든지 가스비 지불하고 자동 정산 트리거 가능
+    function autoReleaseFunds(uint256 _escrowId, bytes32 _proposalId) public {
+        EscrowInfo storage escrow = escrows[_escrowId];
+        require(escrow.status == EscrowStatus.DELIVERED);
+        require(!escrow.raisedDispute);
+        require(
+            block.timestamp >= escrow.deliveryConfirmTime + AUTO_RELEASE_DELAY
+        ); // 자동 정산 지연 시간 경과 확인
+
+        escrow.status = EscrowStatus.COMPLETED;
+        IERC20(escrow.tokenAddress).transfer(escrow.seller, escrow.amount);
+        emit FundsReleased(
+            _escrowId,
+            escrow.seller,
+            escrow.amount,
+            _proposalId
+        );
+    }
+
+    // 관리자 역할이 강제로 에스크로 자금을 판매자에게 전달
+    function releaseFunds(
+        uint256 _escrowId,
+        bytes32 _proposalId
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        EscrowInfo storage escrow = escrows[_escrowId];
+        // DEPOSIT, DELIVERING, DELIVERED, DISPUTED 상태에서 강제 지급 가능
+        require(
+            escrow.status == EscrowStatus.DEPOSIT ||
+                escrow.status == EscrowStatus.DELIVERING || // DELIVERING 상태 포함
+                escrow.status == EscrowStatus.DELIVERED ||
+                escrow.status == EscrowStatus.DISPUTED,
+            "Escrow: Funds cannot be released from current state by admin"
+        );
+
+        escrow.status = EscrowStatus.COMPLETED; // 상태를 COMPLETED로 변경
+        IERC20(escrow.tokenAddress).transfer(escrow.seller, escrow.amount); // 판매자에게 토큰 지급
+        emit FundsReleased(
+            _escrowId,
+            escrow.seller,
+            escrow.amount,
+            _proposalId
+        );
+    }
+
+    // 관리자 역할이 강제로 에스크로 자금을 구매자에게 환불
+    function refundFunds(
+        uint256 _escrowId,
+        bytes32 _proposalId
+    ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        EscrowInfo storage escrow = escrows[_escrowId];
+        // DEPOSIT, DELIVERING, DELIVERED, DISPUTED 상태에서 강제 환불 가능
+        require(
+            escrow.status == EscrowStatus.DEPOSIT ||
+                escrow.status == EscrowStatus.DELIVERING || // DELIVERING 상태 포함
+                escrow.status == EscrowStatus.DELIVERED ||
+                escrow.status == EscrowStatus.DISPUTED,
+            "Escrow: Funds cannot be refunded from current state by admin"
+        );
+
+        escrow.status = EscrowStatus.CANCELED; // 상태를 CANCELED로 변경
+        IERC20(escrow.tokenAddress).transfer(escrow.buyer, escrow.amount); // 구매자에게 토큰 환불
+        emit FundsRefunded(_escrowId, escrow.buyer, escrow.amount, _proposalId);
+    }
 }

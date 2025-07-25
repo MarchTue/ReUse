@@ -8,10 +8,13 @@ import marchtue.reuse.trade.application.dto.response.CreateProposalResponse;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
 import marchtue.reuse.trade.domain.enums.ProposalTradeTypeEnum;
+import marchtue.reuse.trade.domain.enums.TradeTypeEnum;
 import marchtue.reuse.trade.domain.model.Post;
 import marchtue.reuse.trade.domain.model.Proposal;
+import marchtue.reuse.trade.domain.model.Trade;
 import marchtue.reuse.trade.domain.repository.PostRepository;
 import marchtue.reuse.trade.domain.repository.ProposalRepository;
+import marchtue.reuse.trade.domain.repository.TradeRepository;
 import marchtue.reuse.trade.exception.BusinessException;
 import marchtue.reuse.trade.exception.ErrorCode;
 import marchtue.reuse.trade.global.dto.ApiResponse;
@@ -26,6 +29,7 @@ public class ProposalService {
   private final PostService postService;
   private final PostRepository postRepository;
   private final ProposalRepository proposalRepository;
+  private final TradeRepository tradeRepository;
 
   public ApiResponse createProposal(UUID postId, CreateProposalRequest req) {
     Post post = postService.findById(postId);
@@ -70,10 +74,17 @@ public class ProposalService {
     if (!proposal.getState().equals(ProposalStateEnum.WAIT)) {
       throw new BusinessException(ErrorCode.BAD_REQUEST);
     }
+    TradeTypeEnum tradeType =
+        proposal.getType().equals(ProposalTradeTypeEnum.DIRECT) ? TradeTypeEnum.DIRECT
+            : TradeTypeEnum.PARCEL;
+    Trade trade = Trade.create(tradeType, proposal);
+
     post.updatePostState(PostStateEnum.TRADING);
-    postRepository.save(post);
     proposal.acceptProposal();
+    postRepository.save(post);
     proposalRepository.save(proposal);
+    tradeRepository.save(trade);
+    // 블록체인 구현 후 이벤트 발송 필요
     AcceptProposalResponse res = new AcceptProposalResponse(
         proposal.getCreatedBy(), proposal.getType(), proposal.getAddress()
     );

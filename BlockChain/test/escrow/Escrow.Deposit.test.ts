@@ -1,11 +1,7 @@
 import { expect } from "chai";
-import { ethers } from "hardhat";
-import { BigNumberish } from "ethers";
 import { time, loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
-import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
-
-import { deployEscrowFixture, escrowAmount, proposalId, proposalId2 } from "../fixtures/escrowFixture";
+import { deployEscrowFixture, escrowAmount, proposalId } from "../fixtures/escrowFixture";
 import { getPermitSignature } from "../../utils/signature";
 
 

@@ -40,7 +40,7 @@ contract Escrow is AccessControl {
     }
 
     mapping(uint256 => EscrowInfo) public escrows;
-    uint256 private nextEscrowId;
+    uint256 public nextEscrowId;
 
     bytes32 private _DOMAIN_SEPARATOR; // eip712 서명 충돌 방지 도메인 분리자.
 
@@ -100,7 +100,7 @@ contract Escrow is AccessControl {
         bytes32 proposalId
     );
     event EscrowFinalized(uint256 indexed escrowId, bytes32 proposalId);
-    
+
     /**
      * @dev 배송 정보 업데이트에 관한 이벤트
      * @param escrowId 블록체인에서 부여될 에스크로의 ID
@@ -109,7 +109,7 @@ contract Escrow is AccessControl {
      * @param status 배송 상태 - 배송상태는 회사별로 다를 것으로 예상되어 enum 구조화는 진행하지 아니하였소.
      * @param location 배송 현재 위치 - 단 최대한 짧게 유지해야 함
      * @param lastUpdated  마지막 수정 시각
-     * @param proposalId  백엔드에서 사용할 제안과 관련된 ID (변경 가능) 
+     * @param proposalId  백엔드에서 사용할 제안과 관련된 ID (변경 가능)
      */
     event DeliveryDetailsUpdated(
         uint256 indexed escrowId,
@@ -266,7 +266,7 @@ contract Escrow is AccessControl {
             _escrowId,
             _trackingNumber,
             _courier,
-            escrow.deliveryDetails.status,
+            escrow.deliveryDetails.currentStatus,
             escrow.deliveryDetails.location,
             block.timestamp,
             _proposalId
@@ -331,7 +331,7 @@ contract Escrow is AccessControl {
             _escrowId,
             _trackingNumber,
             _courier,
-            escrow.deliveryDetails.status,
+            escrow.deliveryDetails.currentStatus,
             _location,
             block.timestamp,
             _proposalId
@@ -445,7 +445,7 @@ contract Escrow is AccessControl {
         address _address
     ) public onlyRole(DEFAULT_ADMIN_ROLE) {
         require(
-            _account != address(0),
+            _address != address(0),
             "Danger! : Cannot revoke 0x0 address' Role"
         );
         _revokeRole(ORACLE_ROLE, _address);

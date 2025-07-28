@@ -15,8 +15,9 @@ const config: HardhatUserConfig = {
       url: HOLESKY_URL_VAR,
       chainId: 17000,
       accounts: [`0x${MY_ACCOUNT}`],
-    }
-  }
+    },
+    hardhat: {},
+  }, // tqh : 추후 Etherscan 추가
 };
 
 export default config;

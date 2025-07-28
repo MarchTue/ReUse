@@ -40,7 +40,7 @@ contract Escrow is AccessControl {
     }
 
     mapping(uint256 => EscrowInfo) public escrows;
-    uint256 private nextEscrowId;
+    uint256 public nextEscrowId;
 
     bytes32 private _DOMAIN_SEPARATOR; // eip712 서명 충돌 방지 도메인 분리자.
 

@@ -7,7 +7,7 @@ interface MyTokenModuleResults {
 
 export default buildModule("MyTokenModule", (m) => {
   const tokenName = "ReUseToken";
-  const tokenSymbol = "RUT";
+  const tokenSymbol = "RU";
   const initialSupply: bigint = ethers.parseUnits("1000000", 0);
 
 

@@ -39,3 +39,8 @@ model TokenBalance {
   tokenId   Int
   checkedAt DateTime @default(now())
 }
+
+model KvStore {
+  key   String @id
+  value String
+}

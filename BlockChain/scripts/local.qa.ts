@@ -10,8 +10,8 @@ async function main(): Promise<void> {
   const [deployer, client, seller, oracle, anotherUser] = signers;
 
   // 배포된 주소 (필요시 갱신)
-  const MyTokenAddr = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-  const EscrowAddr = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
+  const MyTokenAddr = '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512';
+  const EscrowAddr = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
 
   const MyToken = await ethers.getContractAt("MyToken", MyTokenAddr);
   const Escrow = await ethers.getContractAt("Escrow", EscrowAddr);
@@ -33,6 +33,7 @@ async function main(): Promise<void> {
   console.log(`[3] permit 서명 생성 및 에스크로 생성`);
   const deadlineSec = Math.floor(Date.now() / 1000) + 3600; // 1시간 뒤 만료 (seconds)
   const nonce = await MyToken.nonces(client.address);
+  console.log(nonce, 'asasdhjasdjkhasdhjkasdhjkasdhjk');
   const name = await MyToken.name();
   const version = "1";
   const chainId = (await ethers.provider.getNetwork()).chainId;

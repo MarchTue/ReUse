@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.trade.application.client.UserClient;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
+import marchtue.reuse.trade.application.dto.request.UpdatePostRequest;
 import marchtue.reuse.trade.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.trade.application.dto.response.CreatePostResponse;
 import marchtue.reuse.trade.application.dto.response.InTradingPostResponse;
@@ -256,6 +257,23 @@ public class PostService {
     return ApiResponse.ok(PaginatedResponse.of(page));
   }
 
+  public ApiResponse updatePost(UUID postId, UpdatePostRequest req) {
+    Post post = findById(postId);
+    UUID currentId = RequestUtil.getCurrentUserId();
+    if (!post.getCreatedBy().equals(currentId)) {
+      throw new BusinessException(ErrorCode.FORBIDDEN);
+    }
+    Category category = categoryService.findById(req.category());
+
+    List<PostImage> imageEntities = req.images().stream()
+        .map(link -> PostImage.builder()
+            .imageLink(link)
+            .build())
+        .toList();
+    post.updatePost(req, category, imageEntities);
+    return ApiResponse.ok();
+  }
+
 
   public Post findById(UUID postId) {
     return postRepository.findById(postId)
@@ -265,4 +283,6 @@ public class PostService {
   private Proposal findAcceptedProposal(UUID postId) {
     return proposalRepository.findByPostIdAndState(postId, ProposalStateEnum.ACCEPTED);
   }
+
+
 }

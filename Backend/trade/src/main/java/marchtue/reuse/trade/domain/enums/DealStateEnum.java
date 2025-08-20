@@ -1,6 +1,6 @@
 package marchtue.reuse.trade.domain.enums;
 
-public enum TradeStateEnum {
+public enum DealStateEnum {
 
   PENDING("대기중"), //직거래시
   IN_DELIVERY("배송중"),
@@ -10,7 +10,7 @@ public enum TradeStateEnum {
 
   private String koreanState;
 
-  TradeStateEnum(String koreanState) {
+  DealStateEnum(String koreanState) {
     this.koreanState = koreanState;
   }
 

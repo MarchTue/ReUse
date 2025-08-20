@@ -12,27 +12,27 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import marchtue.reuse.trade.domain.enums.TradeStateEnum;
-import marchtue.reuse.trade.domain.enums.TradeTypeEnum;
+import marchtue.reuse.trade.domain.enums.DealStateEnum;
+import marchtue.reuse.trade.domain.enums.DealTypeEnum;
 import marchtue.reuse.trade.global.common.BaseEntity;
 import org.hibernate.annotations.UuidGenerator;
 
 @Entity
-@Table(name = "trades")
+@Table(name = "deals")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
-public class Trade extends BaseEntity {
+public class Deal extends BaseEntity {
 
   @Id
   @GeneratedValue
   @UuidGenerator
   private UUID id;
 
-  private TradeTypeEnum type;
+  private DealTypeEnum type;
 
-  private TradeStateEnum state;
+  private DealStateEnum state;
 
   private LocalDateTime completedAt;
 
@@ -44,13 +44,13 @@ public class Trade extends BaseEntity {
   @JoinColumn(name = "proposal_id", nullable = false)
   private Proposal proposal;
 
-  public static Trade create(
-      TradeTypeEnum type,
+  public static Deal create(
+      DealTypeEnum type,
       Proposal proposal
   ) {
-    return new Trade().builder()
+    return new Deal().builder()
         .type(type)
-        .state(TradeStateEnum.PENDING)
+        .state(DealStateEnum.PENDING)
         .proposal(proposal)
         .build();
   }

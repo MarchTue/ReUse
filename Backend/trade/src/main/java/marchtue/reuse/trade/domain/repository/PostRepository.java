@@ -15,5 +15,9 @@ public interface PostRepository {
 
   Page<Post> findByCategory(Category category, Pageable pageable);
 
+  Page<Post> findAllByIsDeletedFalse(Pageable pageable);
+
+  Page<Post> findByCategoryAndIsDeletedFalse(Category category, Pageable pageable);
+
   Optional<Post> findById(UUID postId);
 }

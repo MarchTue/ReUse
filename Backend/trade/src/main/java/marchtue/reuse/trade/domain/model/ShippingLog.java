@@ -39,7 +39,7 @@ public class ShippingLog extends BaseEntityNonUpdated {
   private String eventTxHash;
 
   @ManyToOne
-  @JoinColumn(name = "trade_id")
-  private Trade trade;
+  @JoinColumn(name = "deal_id")
+  private Deal deal;
 
 }

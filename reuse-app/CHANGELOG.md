@@ -1,3 +1,25 @@
+## 0.5.0 (2025-08-27)
+
+### ✨ Features
+
+- CurrentToken, Menus, UserProfile 컴포넌트에 대한 테스트 추가 [#43](https://github.com/MarchTue/ReUse/issues/43) (d7cf3b6)
+- 메뉴 항목에 라우트 추가 및 링크 컴포넌트 적용 [#43](https://github.com/MarchTue/ReUse/issues/43) (81dd151)
+- 메뉴 컴포넌트 추가 및 하단 내비게이션 배경색 수정 [#43](https://github.com/MarchTue/ReUse/issues/43) (9bab8c0)
+- 메뉴 구성 및 아이콘 매핑 추가 [#43](https://github.com/MarchTue/ReUse/issues/43) (47e556b)
+- 마이페이지 유저 토큰, 유저 프로필 퍼블리싱 [#43](https://github.com/MarchTue/ReUse/issues/43) (399e8ce)
+- Add new 96x96 PNG icon for the application [#74](https://github.com/MarchTue/ReUse/issues/74) (6180049)
+- 마이페이지 퍼블리싱 - 헤더 - 프로필 - 보유중인 토큰 (작업중) [#43](https://github.com/MarchTue/ReUse/issues/43) (36b115b)
+- README 및 릴리즈 스크립트 추가, CHANGELOG 자동화 기능 구현 [#55](https://github.com/MarchTue/ReUse/issues/55) (8ac513c)
+- README 및 릴리즈 스크립트 추가, CHANGELOG 자동화 기능 구현 [#55](https://github.com/MarchTue/ReUse/issues/55) (ad23e5b)
+
+### 🧹 Chores
+
+- Add missing 'dev-local' script in package.json [#74](https://github.com/MarchTue/ReUse/issues/74) (d420d21)
+
+### 📚 Documentation
+
+- Release 0.5.0 preparation [#43](https://github.com/MarchTue/ReUse/issues/43) (2209fb3)
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -89,5 +111,3 @@ All notable changes to this project will be documented in this file.
 - edit proposal.md [#6](https://github.com/MarchTue/ReUse/issues/6) (c4ff4ff)
 - replace image [#6](https://github.com/MarchTue/ReUse/issues/6) (5ece9f7)
 - add proposal document [#6](https://github.com/MarchTue/ReUse/issues/6) (2032cf7)
-
-

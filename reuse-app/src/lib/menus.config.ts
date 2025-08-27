@@ -30,35 +30,35 @@ export const menuSections = [
   {
     title: "주요 메뉴",
     items: [
-      { label: "관심 상품" },
-      { label: "거래중인 상품" },
-      { label: "판매 내역" },
-      { label: "구매 내역" },
-      { label: "선호 카테고리 설정" },
+      { label: "관심 상품", route: "/mypage/favourites" },
+      { label: "거래중인 상품", route: "/mypage/active" },
+      { label: "판매 내역", route: "/mypage/selling" },
+      { label: "구매 내역", route: "/mypage/buying" },
+      { label: "선호 카테고리 설정", route: "/mypage/preferences" },
     ],
   },
   {
     title: "거래 메뉴",
     items: [
-      { label: "받은 거래 요청" },
-      { label: "보낸 거래 요청" },
-      { label: "거래 내역 일괄 조회" },
+      { label: "받은 거래 요청", route: "/mypage/trade/incoming" },
+      { label: "보낸 거래 요청", route: "/mypage/trade/outgoing" },
+      { label: "거래 내역 일괄 조회", route: "/mypage/trade/history" },
     ],
   },
   {
     title: "결제 메뉴",
     items: [
-      { label: "토큰 이력" },
-      { label: "결제 이력" },
-      { label: "연결된 계좌 설정" },
+      { label: "토큰 이력", route: "/mypage/payment/tokens" },
+      { label: "결제 이력", route: "/mypage/payment/history" },
+      { label: "연결된 계좌 설정", route: "/mypage/payment/accounts" },
     ]
   },
   {
     title: "고객 메뉴"
     , items: [
-      { label: "신고 이력" },
-      { label: "문의 내역" },
-      { label: "자주 묻는 질문" },
+      { label: "신고 이력", route: "/mypage/support/reports" },
+      { label: "문의 내역", route: "/mypage/support/inquiries" },
+      { label: "자주 묻는 질문", route: "/mypage/support/faq" },
     ]
   }
 ];

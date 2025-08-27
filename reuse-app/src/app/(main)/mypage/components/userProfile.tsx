@@ -14,7 +14,7 @@ export default function UserProfile() {
 
   return (
     <div className="p-4 space-y-2">
-      <Card className="border-0 shadow-sm py-2">
+      <Card className="border-2 shadow-sm py-2">
         <CardContent className="p-4">
           <div className="flex items-center space-x-4">
 

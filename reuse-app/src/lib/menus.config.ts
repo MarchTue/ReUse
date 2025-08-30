@@ -34,7 +34,7 @@ export const menuSections = [
       { label: "거래중인 상품", route: "/mypage/active" },
       { label: "판매 내역", route: "/mypage/selling" },
       { label: "구매 내역", route: "/mypage/buying" },
-      { label: "선호 카테고리 설정", route: "/mypage/preferences" },
+      { label: "선호 카테고리 설정", route: "/mypage/category" },
     ],
   },
   {

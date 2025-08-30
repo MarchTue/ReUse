@@ -9,7 +9,7 @@ export default function MyPage() {
 
   return (
     <div className="min-h-screen pb-20">
-      <SubHeader />
+      <SubHeader title={"프로필"} />
       <UserProfile />
       <CurrentToken />
       <Menus></Menus>

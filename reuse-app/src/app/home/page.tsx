@@ -1,3 +1,4 @@
+import Recommend from "@/components/home/recommend";
 import { AppHeader } from "@/components/layout/app-header";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
 
@@ -20,6 +21,11 @@ export default async function Home() {
     <div className="min-h-screen bg-white">
       <AppHeader
       />
+      {/* 추천 상품 */}
+      <Recommend />
+      {/* 카테고리 상품1 - client */}
+      {/* 카테고리 상품2 - client */}
+      {/* 카테고리 상품3 - client */}
 
       <BottomNavigation />
     </div>

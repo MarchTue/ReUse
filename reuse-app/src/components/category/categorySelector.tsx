@@ -1,6 +1,6 @@
 "use client";
 
-import { CATEGORIES } from "@/lib/constants";
+import { CATEGORIES, ECategory } from "@/lib/constants";
 import type { ICategory } from "@/types/common";
 import { useState } from "react";
 import { Badge } from "../ui/badge";
@@ -8,8 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Check } from "lucide-react";
 
 interface ICategorySelectorProps {
-  selectedCategories: string[];
-  onSelectionChange: (categories: string[]) => void;
+  selectedCategories: ECategory[];
+  onSelectionChange: (categories: ECategory[]) => void;
   mode: "create" | "update";
   minSelection?: number;
   maxSelection?: number;
@@ -31,7 +31,7 @@ export default function CategorySelector({
 
   const [categories] = useState<ICategory[]>(CATEGORIES);
 
-  const toggleCategory = (categoryId: string) => { // 카테고리 토글
+  const toggleCategory = (categoryId: ECategory) => { // 카테고리 토글
     const isSelected = selectedCategories.includes(categoryId);
 
     if (isSelected) {

@@ -1,5 +1,7 @@
+import { ECategory } from "@/lib/constants";
+
 export interface ICategory {
-  id: string;
+  id: ECategory;
   name: string;
   icon: string;
   colour: string;

@@ -28,7 +28,7 @@ export function BottomNavigation() {
   const activeTab = getActiveTab();
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 border-t border-l-ios-gray5">
+    <div className="fixed bottom-0 left-0 right-0 border-t border-l-ios-gray5 bg-white">
       <div className="flex justify-around py-2">
         {NAVIGATION_TABS.map((tab) => {
           const IconCompnent = iconMap[tab.id as keyof typeof iconMap];

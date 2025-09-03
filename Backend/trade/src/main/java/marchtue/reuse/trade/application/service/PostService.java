@@ -27,6 +27,8 @@ import marchtue.reuse.trade.application.dto.response.ReadPostListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostResponse;
 import marchtue.reuse.trade.application.dto.response.ReadProductResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
+import marchtue.reuse.trade.application.dto.response.ReadSellingPostListResponse;
+import marchtue.reuse.trade.application.dto.response.ReadSellingPostResponse;
 import marchtue.reuse.trade.application.dto.response.SearchPostListResponse;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
@@ -292,6 +294,21 @@ public class PostService {
     } else {
       throw new BusinessException(ErrorCode.FORBIDDEN);
     }
+  }
+
+  public ApiResponse getSellingPosts(Pageable pageable) {
+    UUID currentUserId = RequestUtil.getCurrentUserId();
+    ReadSellerResponse sellerInfo = userClient.getSellerInfo(currentUserId);
+    Page<Post> postPage = postRepository.findByIsDeletedFalseAndPostStateAndCreatedBy(
+        PostStateEnum.IN_PROGRESS, currentUserId, pageable
+    );
+    Page<ReadSellingPostListResponse> response = postPage.map(p -> {
+      String thumbnail = p.getPostImages().get(0).getImageLink();
+      return ReadSellingPostListResponse.from(p, thumbnail);
+    });
+
+    PaginatedResponse<ReadSellingPostListResponse> paginated = PaginatedResponse.of(response);
+    return ApiResponse.ok(new ReadSellingPostResponse(sellerInfo, paginated));
   }
 
   public Post findById(UUID postId) {

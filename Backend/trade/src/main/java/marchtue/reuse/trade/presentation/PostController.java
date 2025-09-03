@@ -77,4 +77,12 @@ public class PostController {
   ) {
     return postService.deletePost(postId);
   }
+
+  // 판매중 게시글 조회
+  @GetMapping("/selling")
+  public ApiResponse getSellingPosts(
+      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+  ) {
+    return postService.getSellingPosts(pageable);
+  }
 }

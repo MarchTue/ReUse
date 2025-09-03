@@ -2,6 +2,7 @@ package marchtue.reuse.trade.domain.repository;
 
 import java.util.Optional;
 import java.util.UUID;
+import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.model.Category;
 import marchtue.reuse.trade.domain.model.Post;
 import org.springframework.data.domain.Page;
@@ -20,4 +21,7 @@ public interface PostRepository {
   Page<Post> findByCategoryAndIsDeletedFalse(Category category, Pageable pageable);
 
   Optional<Post> findById(UUID postId);
+
+  Page<Post> findByIsDeletedFalseAndPostStateAndCreatedBy(PostStateEnum postState, UUID createdBy,
+      Pageable pageable);
 }

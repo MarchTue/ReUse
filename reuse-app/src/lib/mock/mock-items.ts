@@ -1,28 +1,116 @@
 import { IItem } from '@/types/item';
 
+export const mockItems: IItem[] = [
+  // 디지털/가전
+  {
+    id: "digital-1",
+    title: "무선 이어폰",
+    price: 120000,
+    category: "디지털/가전",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "digital-2",
+    title: "스마트 워치",
+    price: 180000,
+    category: "디지털/가전",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "digital-3",
+    title: "블루투스 스피커",
+    price: 90000,
+    category: "디지털/가전",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "digital-4",
+    title: "HP 노트북",
+    price: 850000,
+    category: "디지털/가전",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "digital-5",
+    title: "태블릿",
+    price: 500000,
+    category: "디지털/가전",
+    imageUrl: "/mock-item.png",
+  },
 
+  // 도서
+  {
+    id: "book-1",
+    title: "신곡",
+    price: 15000,
+    category: "도서",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "book-2",
+    title: "돈 키호테",
+    price: 20000,
+    category: "도서",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "book-3",
+    title: "인간 실격",
+    price: 12000,
+    category: "도서",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "book-4",
+    title: "호모 데우스",
+    price: 25000,
+    category: "도서",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "book-5",
+    title: "프라도 가이드",
+    price: 30000,
+    category: "도서",
+    imageUrl: "/mock-item.png",
+  },
+
+  // 잡화
+  {
+    id: "goods-1",
+    title: "피어싱",
+    price: 8000,
+    category: "잡화",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "goods-2",
+    title: "만년필",
+    price: 45000,
+    category: "잡화",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "goods-3",
+    title: "연필",
+    price: 2000,
+    category: "잡화",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "goods-4",
+    title: "거울",
+    price: 5000,
+    category: "잡화",
+    imageUrl: "/mock-item.png",
+  },
+  {
+    id: "goods-5",
+    title: "머그컵",
+    price: 10000,
+    category: "잡화",
+    imageUrl: "/mock-item.png",
+  },
+];
 
 export const mockCategories = ['디지털/가전', '도서', '잡화'];
-
-const sampleNames: Record<string, string[]> = {
-  "디지털/가전": ["무선 이어폰", "스마트 워치", "블루투스 스피커", "노트북", "태블릿"],
-  "도서": ["신곡", "돈 키호테", "인간 실격", "호모 데우스", "프라도 가이드"],
-  "잡화": ["피어싱", "만년필", "연필", "거울"]
-};
-
-export const mockItems: IItem[] = [];
-
-let idCounter = 1;
-
-mockCategories.forEach((category) => {
-  for (let i = 0; i < 20; i++) {
-    const name = sampleNames[category][Math.floor(Math.random() * sampleNames[category].length)];
-    mockItems.push({
-      id: crypto.randomUUID(),
-      title: `${name} ${i + 1}`,
-      price: Math.floor(Math.random() * 200000) + 10000,
-      category,
-      imageUrl: '/mock-item.png',
-    });
-  }
-});

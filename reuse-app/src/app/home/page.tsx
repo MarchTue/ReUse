@@ -17,7 +17,7 @@ async function getRecentItems() {
 }
 */
 // 혹은 여기도 서버 사이드가 되어야 하나?  -> 좋아요로 인한 CSR 구조로.
-export default async function Home() {
+export default function Home() {
   // 추후 가져올 아이템... 
 
   // 유저 카테고리

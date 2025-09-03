@@ -30,7 +30,7 @@ export default async function Home() {
       <Recommend />
 
       {mockCategories.map((category) => (
-        <Recommend category={category} />
+        <Recommend key={category} category={category} />
       ))}
 
       {/* 카테고리 상품1 - client */}

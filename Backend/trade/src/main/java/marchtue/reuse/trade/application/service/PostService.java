@@ -299,8 +299,9 @@ public class PostService {
   public ApiResponse getSellingPosts(Pageable pageable) {
     UUID currentUserId = RequestUtil.getCurrentUserId();
     ReadSellerResponse sellerInfo = userClient.getSellerInfo(currentUserId);
-    Page<Post> postPage = postRepository.findByIsDeletedFalseAndPostStateAndCreatedBy(
-        PostStateEnum.IN_PROGRESS, currentUserId, pageable
+    List<PostStateEnum> states = List.of(PostStateEnum.IN_PROGRESS, PostStateEnum.TRADING);
+    Page<Post> postPage = postRepository.findByIsDeletedFalseAndPostStateInAndCreatedBy(
+        states, currentUserId, pageable
     );
     Page<ReadSellingPostListResponse> response = postPage.map(p -> {
       String thumbnail = p.getPostImages().get(0).getImageLink();

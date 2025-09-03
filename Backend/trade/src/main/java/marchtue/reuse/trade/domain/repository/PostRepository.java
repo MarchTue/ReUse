@@ -1,5 +1,6 @@
 package marchtue.reuse.trade.domain.repository;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
@@ -22,6 +23,8 @@ public interface PostRepository {
 
   Optional<Post> findById(UUID postId);
 
-  Page<Post> findByIsDeletedFalseAndPostStateAndCreatedBy(PostStateEnum postState, UUID createdBy,
+  Page<Post> findByIsDeletedFalseAndPostStateInAndCreatedBy(
+      Collection<PostStateEnum> postStates,
+      UUID createdBy,
       Pageable pageable);
 }

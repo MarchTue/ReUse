@@ -312,6 +312,21 @@ public class PostService {
     return ApiResponse.ok(new ReadSellingPostResponse(sellerInfo, paginated));
   }
 
+  public ApiResponse getSaleCompletedPosts(UUID userId, Pageable pageable) {
+    UUID targetUserId = userId;
+    ReadSellerResponse sellerInfo = userClient.getSellerInfo(targetUserId);
+    List<PostStateEnum> states = List.of(PostStateEnum.DONE);
+    Page<Post> postPage = postRepository.findByIsDeletedFalseAndPostStateInAndCreatedBy(
+        states, targetUserId, pageable
+    );
+    Page<ReadSellingPostListResponse> response = postPage.map(p -> {
+      String thumbnail = p.getPostImages().get(0).getImageLink();
+      return ReadSellingPostListResponse.from(p, thumbnail);
+    });
+    PaginatedResponse<ReadSellingPostListResponse> paginated = PaginatedResponse.of(response);
+    return ApiResponse.ok(new ReadSellingPostResponse(sellerInfo, paginated));
+  }
+
   public Post findById(UUID postId) {
     return postRepository.findById(postId)
         .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND));

@@ -87,11 +87,12 @@ public class PostController {
     return postService.getSellingPosts(userId, pageable);
   }
 
-  // 판매완료 게시글 조회
-//  @GetMapping("/completed")
-//  public ApiResponse getSaleCompletedPosts(
-//      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
-//  ) {
-//    return postService.getSaleCompletedPosts(pageable);
-//  }
+  //   판매완료 게시글 조회
+  @GetMapping("/complete/{userId}")
+  public ApiResponse getSaleCompletedPosts(
+      @PathVariable UUID userId,
+      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+  ) {
+    return postService.getSaleCompletedPosts(userId, pageable);
+  }
 }

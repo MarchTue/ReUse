@@ -79,10 +79,19 @@ public class PostController {
   }
 
   // 판매중 게시글 조회
-  @GetMapping("/selling")
+  @GetMapping("/selling/{userId}")
   public ApiResponse getSellingPosts(
+      @PathVariable UUID userId,
       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
   ) {
-    return postService.getSellingPosts(pageable);
+    return postService.getSellingPosts(userId, pageable);
   }
+
+  // 판매완료 게시글 조회
+//  @GetMapping("/completed")
+//  public ApiResponse getSaleCompletedPosts(
+//      @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+//  ) {
+//    return postService.getSaleCompletedPosts(pageable);
+//  }
 }

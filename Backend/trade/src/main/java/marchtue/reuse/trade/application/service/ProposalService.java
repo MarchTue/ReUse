@@ -5,16 +5,16 @@ import lombok.RequiredArgsConstructor;
 import marchtue.reuse.trade.application.dto.request.CreateProposalRequest;
 import marchtue.reuse.trade.application.dto.response.AcceptProposalResponse;
 import marchtue.reuse.trade.application.dto.response.CreateProposalResponse;
+import marchtue.reuse.trade.domain.enums.DealTypeEnum;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
+import marchtue.reuse.trade.domain.enums.ProposalDealTypeEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
-import marchtue.reuse.trade.domain.enums.ProposalTradeTypeEnum;
-import marchtue.reuse.trade.domain.enums.TradeTypeEnum;
+import marchtue.reuse.trade.domain.model.Deal;
 import marchtue.reuse.trade.domain.model.Post;
 import marchtue.reuse.trade.domain.model.Proposal;
-import marchtue.reuse.trade.domain.model.Trade;
+import marchtue.reuse.trade.domain.repository.DealRepository;
 import marchtue.reuse.trade.domain.repository.PostRepository;
 import marchtue.reuse.trade.domain.repository.ProposalRepository;
-import marchtue.reuse.trade.domain.repository.TradeRepository;
 import marchtue.reuse.trade.exception.BusinessException;
 import marchtue.reuse.trade.exception.ErrorCode;
 import marchtue.reuse.trade.global.dto.ApiResponse;
@@ -29,7 +29,7 @@ public class ProposalService {
   private final PostService postService;
   private final PostRepository postRepository;
   private final ProposalRepository proposalRepository;
-  private final TradeRepository tradeRepository;
+  private final DealRepository dealRepository;
 
   public ApiResponse createProposal(UUID postId, CreateProposalRequest req) {
     Post post = postService.findById(postId);
@@ -44,10 +44,10 @@ public class ProposalService {
     if (!req.direct() && !req.parcel()) {
       throw new BusinessException(ErrorCode.BAD_REQUEST);
     }
-    ProposalTradeTypeEnum tradeType = req.direct()
-        ? ProposalTradeTypeEnum.DIRECT
-        : ProposalTradeTypeEnum.PARCEL;
-    String address = tradeType == ProposalTradeTypeEnum.PARCEL ? req.address() : null;
+    ProposalDealTypeEnum tradeType = req.direct()
+        ? ProposalDealTypeEnum.DIRECT
+        : ProposalDealTypeEnum.PARCEL;
+    String address = tradeType == ProposalDealTypeEnum.PARCEL ? req.address() : null;
     Proposal proposal = Proposal.create(
         tradeType,
         req.price(),
@@ -74,16 +74,16 @@ public class ProposalService {
     if (!proposal.getState().equals(ProposalStateEnum.WAIT)) {
       throw new BusinessException(ErrorCode.BAD_REQUEST);
     }
-    TradeTypeEnum tradeType =
-        proposal.getType().equals(ProposalTradeTypeEnum.DIRECT) ? TradeTypeEnum.DIRECT
-            : TradeTypeEnum.PARCEL;
-    Trade trade = Trade.create(tradeType, proposal);
+    DealTypeEnum tradeType =
+        proposal.getType().equals(ProposalDealTypeEnum.DIRECT) ? DealTypeEnum.DIRECT
+            : DealTypeEnum.PARCEL;
+    Deal deal = Deal.create(tradeType, proposal);
 
     post.updatePostState(PostStateEnum.TRADING);
     proposal.acceptProposal();
     postRepository.save(post);
     proposalRepository.save(proposal);
-    tradeRepository.save(trade);
+    dealRepository.save(deal);
     // 블록체인 구현 후 이벤트 발송 필요
     AcceptProposalResponse res = new AcceptProposalResponse(
         proposal.getCreatedBy(), proposal.getType(), proposal.getAddress()

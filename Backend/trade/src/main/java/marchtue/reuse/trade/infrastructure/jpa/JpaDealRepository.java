@@ -1,12 +1,12 @@
 package marchtue.reuse.trade.infrastructure.jpa;
 
 import java.util.UUID;
-import marchtue.reuse.trade.domain.model.Trade;
-import marchtue.reuse.trade.domain.repository.TradeRepository;
+import marchtue.reuse.trade.domain.model.Deal;
+import marchtue.reuse.trade.domain.repository.DealRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface JpaTradeRepository extends TradeRepository, JpaRepository<Trade, UUID> {
+public interface JpaDealRepository extends DealRepository, JpaRepository<Deal, UUID> {
 
 }

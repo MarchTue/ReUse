@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import marchtue.reuse.trade.application.client.UserClient;
 import marchtue.reuse.trade.application.dto.request.CreatePostRequest;
+import marchtue.reuse.trade.application.dto.request.UpdatePostRequest;
 import marchtue.reuse.trade.application.dto.response.BuyerInfoResponse;
 import marchtue.reuse.trade.application.dto.response.CreatePostResponse;
 import marchtue.reuse.trade.application.dto.response.InTradingPostResponse;
@@ -26,9 +27,12 @@ import marchtue.reuse.trade.application.dto.response.ReadPostListResponse;
 import marchtue.reuse.trade.application.dto.response.ReadPostResponse;
 import marchtue.reuse.trade.application.dto.response.ReadProductResponse;
 import marchtue.reuse.trade.application.dto.response.ReadSellerResponse;
+import marchtue.reuse.trade.application.dto.response.ReadSellingPostListResponse;
+import marchtue.reuse.trade.application.dto.response.ReadSellingPostResponse;
 import marchtue.reuse.trade.application.dto.response.SearchPostListResponse;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
+import marchtue.reuse.trade.domain.enums.UserRoleEnum;
 import marchtue.reuse.trade.domain.model.Category;
 import marchtue.reuse.trade.domain.model.Post;
 import marchtue.reuse.trade.domain.model.PostImage;
@@ -48,6 +52,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -106,8 +112,9 @@ public class PostService {
   public ApiResponse readPostList(UUID categoryId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
     Page<Post> postPage = (categoryId == null)
-        ? postRepository.findAll(pageable)
-        : postRepository.findByCategory(categoryService.findById(categoryId), pageable);
+        ? postRepository.findAllByIsDeletedFalse(pageable)
+        : postRepository.findByCategoryAndIsDeletedFalse(categoryService.findById(categoryId),
+            pageable);
 
     List<Post> posts = postPage.getContent();
 
@@ -256,6 +263,69 @@ public class PostService {
     return ApiResponse.ok(PaginatedResponse.of(page));
   }
 
+  public ApiResponse updatePost(UUID postId, UpdatePostRequest req) {
+    Post post = findById(postId);
+    UUID currentId = RequestUtil.getCurrentUserId();
+    if (!post.getCreatedBy().equals(currentId)) {
+      throw new BusinessException(ErrorCode.FORBIDDEN);
+    }
+    Category category = categoryService.findById(req.category());
+
+    List<PostImage> imageEntities = req.images().stream()
+        .map(link -> PostImage.builder()
+            .imageLink(link)
+            .build())
+        .toList();
+    post.updatePost(req, category, imageEntities);
+    return ApiResponse.ok();
+  }
+
+  public ApiResponse deletePost(UUID postId) {
+    Post post = findById(postId);
+    if (post.getPostState().equals(PostStateEnum.TRADING)) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    if (post.getCreatedBy().equals(RequestUtil.getCurrentUserId()) ||
+        checkUserRole().equals(UserRoleEnum.ROLE_MANAGER) ||
+        checkUserRole().equals(UserRoleEnum.ROLE_MASTER)) {
+      post.deleteBase();
+      postRepository.save(post);
+      return ApiResponse.ok();
+    } else {
+      throw new BusinessException(ErrorCode.FORBIDDEN);
+    }
+  }
+
+  public ApiResponse getSellingPosts(UUID userId, Pageable pageable) {
+    UUID targetUserId = userId;
+    ReadSellerResponse sellerInfo = userClient.getSellerInfo(targetUserId);
+    List<PostStateEnum> states = List.of(PostStateEnum.IN_PROGRESS, PostStateEnum.TRADING);
+    Page<Post> postPage = postRepository.findByIsDeletedFalseAndPostStateInAndCreatedBy(
+        states, targetUserId, pageable
+    );
+    Page<ReadSellingPostListResponse> response = postPage.map(p -> {
+      String thumbnail = p.getPostImages().get(0).getImageLink();
+      return ReadSellingPostListResponse.from(p, thumbnail);
+    });
+
+    PaginatedResponse<ReadSellingPostListResponse> paginated = PaginatedResponse.of(response);
+    return ApiResponse.ok(new ReadSellingPostResponse(sellerInfo, paginated));
+  }
+
+  public ApiResponse getSaleCompletedPosts(UUID userId, Pageable pageable) {
+    UUID targetUserId = userId;
+    ReadSellerResponse sellerInfo = userClient.getSellerInfo(targetUserId);
+    List<PostStateEnum> states = List.of(PostStateEnum.DONE);
+    Page<Post> postPage = postRepository.findByIsDeletedFalseAndPostStateInAndCreatedBy(
+        states, targetUserId, pageable
+    );
+    Page<ReadSellingPostListResponse> response = postPage.map(p -> {
+      String thumbnail = p.getPostImages().get(0).getImageLink();
+      return ReadSellingPostListResponse.from(p, thumbnail);
+    });
+    PaginatedResponse<ReadSellingPostListResponse> paginated = PaginatedResponse.of(response);
+    return ApiResponse.ok(new ReadSellingPostResponse(sellerInfo, paginated));
+  }
 
   public Post findById(UUID postId) {
     return postRepository.findById(postId)
@@ -265,4 +335,18 @@ public class PostService {
   private Proposal findAcceptedProposal(UUID postId) {
     return proposalRepository.findByPostIdAndState(postId, ProposalStateEnum.ACCEPTED);
   }
+
+  private UserRoleEnum checkUserRole() {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (auth == null || !auth.isAuthenticated()) {
+      throw new BusinessException(ErrorCode.NO_ROLE);
+    }
+
+    return auth.getAuthorities().stream()
+        .findFirst()
+        .map(authority -> UserRoleEnum.valueOf(authority.getAuthority()))
+        .orElseThrow(() -> new BusinessException(ErrorCode.NO_ROLE));
+  }
+
+
 }

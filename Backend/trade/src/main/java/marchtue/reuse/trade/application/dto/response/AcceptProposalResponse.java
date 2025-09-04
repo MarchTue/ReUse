@@ -1,11 +1,11 @@
 package marchtue.reuse.trade.application.dto.response;
 
 import java.util.UUID;
-import marchtue.reuse.trade.domain.enums.ProposalTradeTypeEnum;
+import marchtue.reuse.trade.domain.enums.ProposalDealTypeEnum;
 
 public record AcceptProposalResponse(
     UUID buyerId,
-    ProposalTradeTypeEnum tradeWay,
+    ProposalDealTypeEnum tradeWay,
     String address
 
 ) {

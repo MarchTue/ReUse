@@ -12,8 +12,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import marchtue.reuse.trade.domain.enums.ProposalDealTypeEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
-import marchtue.reuse.trade.domain.enums.ProposalTradeTypeEnum;
 import marchtue.reuse.trade.global.common.BaseEntityNonUpdated;
 import org.hibernate.annotations.UuidGenerator;
 
@@ -30,7 +30,7 @@ public class Proposal extends BaseEntityNonUpdated {
   @UuidGenerator
   private UUID id;
 
-  private ProposalTradeTypeEnum type;
+  private ProposalDealTypeEnum type;
 
   private long price;
 
@@ -43,10 +43,10 @@ public class Proposal extends BaseEntityNonUpdated {
   private Post post;
 
   @OneToOne(mappedBy = "proposal")
-  private Trade trade;
+  private Deal deal;
 
   public static Proposal create(
-      ProposalTradeTypeEnum type,
+      ProposalDealTypeEnum type,
       long price,
       String address,
       ProposalStateEnum state,

@@ -1,13 +1,13 @@
 package marchtue.reuse.trade.domain.enums;
 
-public enum TradeTypeEnum {
+public enum DealTypeEnum {
 
   PARCEL("택배"),
   DIRECT("직거래");
 
   private String koreanState;
 
-  TradeTypeEnum(String koreanState) {
+  DealTypeEnum(String koreanState) {
     this.koreanState = koreanState;
   }
 

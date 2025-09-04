@@ -36,6 +36,6 @@ public class Review {
   private ReviewerTypeEnum reviewerType;
 
   @OneToOne
-  @JoinColumn(name = "trade_id", nullable = false)
-  private Trade trade;
+  @JoinColumn(name = "deal_id", nullable = false)
+  private Deal deal;
 }

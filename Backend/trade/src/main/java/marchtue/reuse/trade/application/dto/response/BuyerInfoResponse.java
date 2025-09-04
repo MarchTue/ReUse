@@ -1,14 +1,14 @@
 package marchtue.reuse.trade.application.dto.response;
 
 import java.util.UUID;
+import marchtue.reuse.trade.domain.enums.ProposalDealTypeEnum;
 import marchtue.reuse.trade.domain.enums.ProposalStateEnum;
-import marchtue.reuse.trade.domain.enums.ProposalTradeTypeEnum;
 import marchtue.reuse.trade.domain.model.Proposal;
 
 public record BuyerInfoResponse(
     UUID proposalId,
     UUID buyerId,
-    ProposalTradeTypeEnum type,
+    ProposalDealTypeEnum type,
     String address,
     long price,
 

@@ -19,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import marchtue.reuse.trade.application.dto.request.UpdatePostRequest;
 import marchtue.reuse.trade.domain.enums.PostStateEnum;
 import marchtue.reuse.trade.domain.enums.ProductStateEnum;
 import marchtue.reuse.trade.global.common.BaseEntity;
@@ -98,5 +99,22 @@ public class Post extends BaseEntity {
       PostStateEnum postStateEnum
   ) {
     this.postState = postStateEnum;
+  }
+
+  public Post updatePost(
+      UpdatePostRequest req,
+      Category category,
+      List<PostImage> images
+  ) {
+    this.title = req.title();
+    this.category = category;
+    this.price = req.price();
+    this.postImages = images;
+    this.content = req.description();
+    this.isDirect = req.isDirect();
+    this.directAddress = req.directAddress();
+    this.isParcel = req.parcel();
+    this.productState = req.productState();
+    return this;
   }
 }

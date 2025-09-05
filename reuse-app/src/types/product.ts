@@ -10,33 +10,39 @@ export interface IProduct {
   };
 }
 
+
+
 export interface IProductDetail {
-  product: {
-    id: string;
-    title: string;
-    category: string;
-    price: number;
-    images: string[];
-    content: string;
-    is_direct: boolean;
-    direct_address: string;
-    is_parcel: boolean;
-    product_state: string;
-    is_fav: boolean;
-    post_state: string;
-    created_at: string;
-    views: number;
-  };
-  seller: {
-    content: string;
-    is_direct: boolean;
-    direct_address?: string;
-    is_parcel: boolean;
-    is_fav: boolean;
-    post_state: any; // Enum 확인할 것
-    created_at: Date;
-  };
+  product: IProductInfo;
+  seller: ISeller;
   proposals?: IProposal[];
+}
+
+export interface IProductInfo {
+  id: string;
+  title: string;
+  category: string;
+  price: number;
+  images: string[];
+  content: string;
+  is_direct: boolean;
+  direct_address: string;
+  is_parcel: boolean;
+  product_state: string;
+  is_fav: boolean;
+  post_state: string;
+  created_at: string;
+  views: number;
+}
+
+export interface ISeller {
+  seller_id: string;
+  profile: string;
+  nickname: string;
+  created_at: Date | string;
+  rating: number;
+  in_progress_trade: number;
+  completed_trade: number;
 }
 
 export interface IProposal {

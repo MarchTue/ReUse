@@ -1,5 +1,5 @@
 
-export default function ItemTitleButton({
+export default function ProductTitleButton({
   title,
   categoryId
 }: { title: string; categoryId?: string; }) {

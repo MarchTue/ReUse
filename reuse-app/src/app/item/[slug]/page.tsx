@@ -1,6 +1,6 @@
-import ItemDetail from "@/components/item/itemDetail";
-import ItemHeader from "@/components/item/itemHeader";
-import { mockItems } from "@/lib/mock/mock-items";
+import ProductDetail from "@/components/product/productDetail";
+import ProductHeader from "@/components/product/productHeader";
+import { mockProducts } from "@/lib/mock/mock-items";
 import { notFound } from "next/navigation";
 
 
@@ -10,15 +10,16 @@ export default async function ItemDetailPage({
 }: {
   params: { slug: string; };
 }) {
-  const item = mockItems.find((i) => i.id === params.slug);
-  console.log(item);
-  if (!item) return <div className="p-6">상품을 찾을 수 없습니다.</div>;
+  const product = mockProducts.find((i) => i.id === params.slug);
+  console.log(product);
+  if (!product) return <div className="p-6">상품을 찾을 수 없습니다.</div>;
 
 
   return (
     <div className="min-h-screen bg-white">
-      <ItemHeader title={item.title} />
-      <ItemDetail />
+      <ProductHeader title={product.title} />
+      {/* <ItemImages product={product} /> */}
+      <ProductDetail />
     </div>
   );
 }

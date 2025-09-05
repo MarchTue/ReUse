@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { ArrowLeft, Heart, Share } from "lucide-react";
 
-export default function ItemHeader({ title }: { title: string; }) {
+export default function ProductHeader({ title }: { title: string; }) {
   const router = useRouter();
   const [isLiked, setIsLiked] = useState(false);
   // tqh : 좋아요 확인, 좋아요 호출.

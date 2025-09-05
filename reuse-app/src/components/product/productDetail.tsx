@@ -1,7 +1,7 @@
 "use client";
 
 
-export default function ItemDetail() {
+export default function ProductDetail() {
   return (
     <div className="min-h-screen pb-20">
 

@@ -1,6 +1,6 @@
-import { IItem } from '@/types/item';
+import { IProduct } from '@/types/product';
 
-export const mockItems: IItem[] = [
+export const mockProducts: IProduct[] = [
   // 디지털/가전
   {
     id: "digital-1",

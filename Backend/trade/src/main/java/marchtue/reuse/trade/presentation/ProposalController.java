@@ -42,4 +42,11 @@ public class ProposalController {
   ) {
     return proposalService.rejectProposal(proposalId);
   }
+
+  @GetMapping("/cancle/{proposalId}")
+  public ApiResponse cancleProposal(
+      @PathVariable UUID proposalId
+  ) {
+    return proposalService.cancleProposal(proposalId);
+  }
 }

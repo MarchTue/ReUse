@@ -1,3 +1,4 @@
+import ProductSeller from "@/components/product/productSeller";
 import ProductDetail from "@/components/product/productDetail";
 import ProductHeader from "@/components/product/productHeader";
 import ProductImages from "@/components/product/productImages";
@@ -26,7 +27,7 @@ export default async function ProductDetailPage({
       <ProductHeader title={product.title} />
       <ProductImages title={product.title} images={product.images} views={product.views} />
       <ProductDetail productProp={productTotal} />
-
+      <ProductSeller seller={productTotal.seller} />
     </div>
   );
 }

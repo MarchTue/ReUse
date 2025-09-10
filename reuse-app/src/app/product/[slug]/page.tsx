@@ -4,7 +4,7 @@ import ProductHeader from "@/components/product/productHeader";
 import ProductImages from "@/components/product/productImages";
 import { mockProductDetails } from "@/lib/mock/mock-item-details";
 import { mockProducts } from "@/lib/mock/mock-items";
-import { notFound } from "next/navigation";
+import ProductButtons from "@/components/product/productButtons";
 
 
 
@@ -23,11 +23,12 @@ export default async function ProductDetailPage({
 
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pb-24">
       <ProductHeader title={product.title} />
       <ProductImages title={product.title} images={product.images} views={product.views} />
       <ProductDetail productProp={productTotal} />
       <ProductSeller seller={productTotal.seller} />
+      <ProductButtons productInfo={product} seller={productTotal.seller} />
     </div>
   );
 }

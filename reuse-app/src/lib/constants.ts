@@ -32,88 +32,130 @@ export const NAVIGATION_TABS = [
   { id: "myPage", label: "마이", path: "/mypage" },
 ] as const;
 
+
+export enum ECategory {
+  ELECTRONICS = "ELECTRONICS",
+  INTERIOR = "INTERIOR",
+  KIDS_BABY = "KIDS_BABY",
+  WOMENS_CLOTHING = "WOMENS_CLOTHING",
+  MENS_CLOTHING = "MENS_CLOTHING",
+  ACCESSORIES = "ACCESSORIES",
+  HOUSEHOLD = "HOUSEHOLD",
+  SPORTS = "SPORTS",
+  HOBBY = "HOBBY",
+  BEAUTY = "BEAUTY",
+  PLANTS = "PLANTS",
+  PETS = "PETS",
+  TICKETS = "TICKETS",
+  BOOKS = "BOOKS",
+  OTHERS = "OTHERS",
+}
+
 export const CATEGORIES: ICategory[] = [
   {
-    id: "electronics",
+    id: ECategory.ELECTRONICS,
     name: "디지털/가전",
     icon: "📱",
     colour: "#007aff",
     // description: "스마트폰, 노트북, 각종 가전",
   }, // 1
   {
-    id: "home",
-    name: "가구/인테리어",
+    id: ECategory.INTERIOR,
+    name: "인테리어",
     icon: "🏠",
     colour: "#34c759",
     // description: "",
   },
   {
-    id: "WFashion",
+    id: ECategory.KIDS_BABY,
+    name: "유아동",
+    icon: "👶",
+    colour: "#FFF106",
+    // description: "",
+  },
+  {
+    id: ECategory.WOMENS_CLOTHING,
     name: "여성의류",
     icon: "👗",
     colour: "#ff2d55",
     // description: "",
   }, // 3
+
   {
-    id: "MFashion",
+    id: ECategory.MENS_CLOTHING,
     name: "남성의류",
     icon: "👔",
     colour: "#5856d6",
     // description: "",
   },
   {
-    id: "accessories",
+    id: ECategory.ACCESSORIES,
     name: "잡화",
     icon: "👜",
     colour: "#ff9500",
     // description: "",
   },
   {
-    id: "living",
+    id: ECategory.HOUSEHOLD,
     name: "생활/주방",
     icon: "🥣",
     colour: "#a2845e",
     // description: "",
   },
   {
-    id: "sports",
+    id: ECategory.SPORTS,
     name: "스포츠",
     icon: "⚽",
     colour: "#5ac8fa",
     // description: "",
   },
   {
-    id: "hobbies",
+    id: ECategory.HOBBY,
     name: "취미",
     icon: "🎨",
     colour: "#6a4395",
     // description: "",
   }, // 8 
   {
-    id: "beauty",
+    id: ECategory.BEAUTY,
     name: "뷰티/미용",
     icon: "💄",
     colour: "#ff2d55",
     // description: "",
   },
   {
-    id: "tickets",
-    name: "티켓/교환권",
-    icon: "🎫",
-    colour: "#ffcc00",
+    id: ECategory.PLANTS,
+    name: "식물",
+    icon: "🌳",
+    colour: "#42F04F",
     // description: "",
-  }, // 10
+  },
   {
-    id: "pet",
+    id: ECategory.PETS,
     name: "반려동물",
     icon: "🐾",
     colour: "#d35c1d",
     // description: "",
   },
   {
-    id: "books",
+    id: ECategory.TICKETS,
+    name: "티켓/교환권",
+    icon: "🎫",
+    colour: "#ffcc00",
+    // description: "",
+  }, // 10
+
+  {
+    id: ECategory.BOOKS,
     name: "도서",
     icon: "📚",
+    colour: "#4a4a4a",
+    // description: "",
+  },
+  {
+    id: ECategory.OTHERS,
+    name: "기타",
+    icon: "☑️",
     colour: "#4a4a4a",
     // description: "",
   },

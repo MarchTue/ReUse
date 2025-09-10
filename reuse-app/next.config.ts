@@ -14,7 +14,8 @@ const nextConfig: NextConfig = {
   // },
   images: {
     remotePatterns: [
-      { hostname: 'http.cat' }
+      { hostname: 'http.cat' },
+      { hostname: "cataas.com" }
     ]
   }
 };

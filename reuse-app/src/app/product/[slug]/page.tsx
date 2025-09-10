@@ -25,7 +25,8 @@ export default async function ProductDetailPage({
     <div className="min-h-screen bg-white">
       <ProductHeader title={product.title} />
       <ProductImages title={product.title} images={product.images} views={product.views} />
-      <ProductDetail />
+      <ProductDetail productProp={productTotal} />
+
     </div>
   );
 }

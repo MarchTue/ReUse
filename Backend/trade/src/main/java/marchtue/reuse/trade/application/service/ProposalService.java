@@ -110,6 +110,24 @@ public class ProposalService {
     return ApiResponse.ok();
   }
 
+  public ApiResponse cancelProposal(UUID proposalId) {
+    Proposal proposal = findById(proposalId);
+    if (proposal == null) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    UUID currentId = RequestUtil.getCurrentUserId();
+    if (!proposal.getCreatedBy().equals(currentId)) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    if (!proposal.getState().equals(ProposalStateEnum.WAIT)) {
+      throw new BusinessException(ErrorCode.BAD_REQUEST);
+    }
+    proposal.cancelProposal();
+    proposal.deleteBase();
+    proposalRepository.save(proposal);
+    return ApiResponse.ok();
+  }
+
   public Proposal findById(UUID proposalId) {
     return proposalRepository.findById(proposalId).orElse(null);
   }

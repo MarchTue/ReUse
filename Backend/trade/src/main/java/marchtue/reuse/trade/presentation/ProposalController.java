@@ -43,10 +43,10 @@ public class ProposalController {
     return proposalService.rejectProposal(proposalId);
   }
 
-  @GetMapping("/cancle/{proposalId}")
-  public ApiResponse cancleProposal(
+  @GetMapping("/cancel/{proposalId}")
+  public ApiResponse cancelProposal(
       @PathVariable UUID proposalId
   ) {
-    return proposalService.cancleProposal(proposalId);
+    return proposalService.cancelProposal(proposalId);
   }
 }

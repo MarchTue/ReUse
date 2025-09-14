@@ -69,6 +69,20 @@ contract MyToken is ERC20, AccessControl, ERC20Permit {
         emit Burned(msg.sender, amount);
     }
 
+    function burnFrom(
+        address user,
+        uint256 amount
+    ) public onlyRole(ADMIN_ROLE) {
+        require(user != address(0), "Invalid user address");
+        require(
+            balanceOf(user) >= amount,
+            "ERC20: Burn amount exceeds balance"
+        );
+
+        _burn(user, amount);
+        emit Burned(user, amount);
+    }
+
     function addAdmin(address account) public onlyOwner {
         require(account != address(0), "ERC20: add admin to the zero address");
         grantRole(ADMIN_ROLE, account);

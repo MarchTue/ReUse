@@ -1,10 +1,13 @@
+//! ## 니모닉 생성 및 시드 파생 구현
+//!
+//! `generate_new_mnemonic` - 니모닉 구문 생성
+//!
+//! `derive_seed_from_mnemonic` - 니모닉 문자열과 암호를 통한 시드 파생
+use bip39::Mnemonic;
 use std::str::FromStr;
-
-use bip39::{Language, Mnemonic};
-
-/// ## 16단어 니모닉 구문을 생성.
+/// ## 12단어 니모닉 구문을 생성.
 pub fn generate_new_mnemonic() -> Result<Mnemonic, bip39::Error> {
-    Mnemonic::generate(16)
+    Mnemonic::generate(12)
 }
 
 /// ## 니모닉 문자열과 암호를 통한 시드 파생

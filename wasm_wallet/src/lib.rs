@@ -8,6 +8,11 @@ use crate::modules::{mnemonic, signer, wallet};
 
 // use wasm_bindgen::prelude::*;
 
+#[wasm_bindgen(start)]
+pub fn main_js() {
+    console_error_panic_hook::set_once();
+}
+
 /// 니모닉 구문 생성
 #[wasm_bindgen]
 pub fn generate_new_mnemonic() -> Result<String, String> {

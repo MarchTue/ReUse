@@ -17,7 +17,7 @@ bip32 = {version = "0.5.3", features =["alloc"]}
 k256 = {version = "0.13.4", features = ["ecdsa", "pkcs8"]}
 sha3 = "0.10.8"
 rand = "0.8.5" # random number generator
-getrandom = "0.2.14" 
+getrandom = {version = "0.2.14", features= ["js"]} 
 base64 = "0.22.1"
 hex = "0.4.3"
 pbkdf2 = "0.12.2"
@@ -28,7 +28,7 @@ aes-gcm = "0.10.3"
 ethers-core = "2.0.13"
 ethers-signers = "2.0.13"
 
-console_error_panic_hook = {version = "0.1.7", optional = true}
+console_error_panic_hook = "0.1.7"
 wasm-bindgen-futures = "0.4.53"
 
 [features]

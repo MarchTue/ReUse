@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
   //   };
   //   return config;
   // },
+  webpack: (config, { isServer }) => {
+    config.experiments = { asyncWebAssembly: true, layers: true };
+    return config;
+  },
   images: {
     remotePatterns: [
       { hostname: 'http.cat' },

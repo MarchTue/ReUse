@@ -1,9 +1,9 @@
 import { idbStorage } from "@/hooks/useIdbStorage";
-import { useWasmFunctions } from "@/hooks/useWasmFunctions";
+import { getWasmFunctions } from "@/utils/getWasmFunctions";
 import { create } from "zustand";
 import { persist } from 'zustand/middleware';
 
-const wasm = useWasmFunctions();
+const wasm = getWasmFunctions();
 
 
 interface IWalletState {

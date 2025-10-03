@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 
 import { useAuthStore } from "@/store/auth";
+import { useWalletStore } from "@/store/walletStore";
 import { ArrowRight, Shield, ShoppingBag, Wallet } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,7 +13,11 @@ import { useEffect, useState } from "react";
 export default function OnboardingPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isChecking, setIsChecking] = useState(false); // 추후 개발 진행 후, 토큰 체크가 가능하다면, true로 변경
+
+  // Zustand 상태 구독  
   const { isAuthenticated, token } = useAuthStore();
+  const { address, isConnected, hasWalletData, isInitialized, initialize } = useWalletStore();
+
   const router = useRouter();
 
   const slides = [
@@ -40,7 +45,38 @@ export default function OnboardingPage() {
   ];
 
   //  // 토큰 있으면 유효성 검사 후 메인 리다이렉트. - 추후 구현
-  // useEffect(()=> {})
+  useEffect(() => {
+    if (!isInitialized) {
+      initialize();
+      // auth 관련 로직도 이곳에 들어가야 한다. tqh
+      return;
+    }
+    if (isAuthenticated || hasWalletData) {
+      let redirectPath;
+
+      if (isAuthenticated) {
+        if (isConnected) { // 인증 + 지갑
+          redirectPath = '/home';
+        } else if (hasWalletData) { // 인증 + 데이터 있음 하지만 지갑 잠김
+          redirectPath = "/wallet/unlock";
+        } else {
+          redirectPath = "/wallet/create-or-recover";
+        }
+      } else if (hasWalletData) {
+        // 토큰 X but 지갑 있음 <- 이상상황 (인증 / 로그인 DID 인증) 필요
+        redirectPath = "/auth/verification";
+      } else {
+        // 미인증 + wallet 없음
+        setIsChecking(false);
+        return;
+      }
+      console.log(`Router: Redirecting to ${redirectPath}`);
+      router.replace(redirectPath);
+      return;
+    }
+    setIsChecking(false);
+
+  }, [isInitialized, isConnected, hasWalletData, isAuthenticated, initialize, router]);
 
   // 슬라이드 
   useEffect(() => {
@@ -51,6 +87,8 @@ export default function OnboardingPage() {
       return () => clearInterval(timer);
     }
   }, [slides.length, isChecking]);
+
+
 
 
   const currentSlideData = slides[currentSlide];

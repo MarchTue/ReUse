@@ -1,10 +1,10 @@
 'use client';
 
-import { useWasmFunctions } from "@/hooks/useWasmFunctions";
+import { getWasmFunctions } from "@/utils/getWasmFunctions";
 import { useEffect, useState, useCallback } from "react";
 
 export default function WalletTestPage() {
-  const { generateMnemonic, getAddress } = useWasmFunctions();
+  const { generateMnemonic, getAddress } = getWasmFunctions();
 
   const [generatedMnemonic, setGeneratedMnemonic] = useState<string | null>(null);
   const [inputMnemonic, setInputMnemonic] = useState<string>('');

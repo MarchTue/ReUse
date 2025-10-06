@@ -18,6 +18,8 @@ interface IWalletState {
   createWalletAndConnect: (password: string) => Promise<void>;
   importWalletAndConnect: (mnemonic: string, password: string) => Promise<void>;
   clearError: () => void;
+  lockWallet: () => void;
+
 }
 
 
@@ -57,6 +59,7 @@ export const useWalletStore = create<IWalletState>()(
           set({ error: "IDB 초기화 오류", isInitialized: true });
         }
       },
+
       createWalletAndConnect: async (password) => {
         try {
           get().clearError();
@@ -103,6 +106,9 @@ export const useWalletStore = create<IWalletState>()(
         }
       }, // importWalletAndConnect ends
 
+      lockWallet: () => {
+        set({ address: null, isConnected: false });
+      },
 
     }),
     // options

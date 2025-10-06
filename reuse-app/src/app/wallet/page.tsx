@@ -22,7 +22,8 @@ export default function WalletMainPage() {
   const {
     isConnected,
     hasWalletData,
-    address
+    address,
+    lockWallet
   } = useWalletStore();
 
   const isCreateDisabled = hasWalletData;
@@ -42,7 +43,13 @@ export default function WalletMainPage() {
   const lockUnlockIcon = isConnected ? Lock : KeyRound;
   const lockUnlockIconClass = isConnected ? 'text-primary' : 'text-primary';
 
-
+  const handleLockUnlockClick = () => {
+    if (isConnected) {
+      lockWallet();
+    } else {
+      router.push('/wallet/unlock');
+    }
+  };
 
   return (
     <div>
@@ -104,7 +111,7 @@ export default function WalletMainPage() {
             disabled={false}
             icon={lockUnlockIcon}
             iconClass={lockUnlockIconClass}
-            onClick={() => router.push(lockUnlockPath)}
+            onClick={handleLockUnlockClick}
             title={lockUnlockTitle}
           />}
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import PostButton from "@/components/home/postButton";
 import Recommend from "@/components/home/recommend";
 import { AppHeader } from "@/components/layout/app-header";
 import { BottomNavigation } from "@/components/layout/bottom-navigation";
@@ -37,6 +38,7 @@ export default function Home() {
       {/* 카테고리 상품2 - client */}
       {/* 카테고리 상품3 - client */}
       <BottomNavigation />
+      <PostButton />
     </div>
 
   );

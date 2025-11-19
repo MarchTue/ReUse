@@ -52,3 +52,20 @@ export interface IProposal {
   price: number;
   type: any;  // enum 확인
 }
+
+/**
+ * 상품 상태 ENUM
+ */
+export type TProductState = 'HIGHEST' | 'HIGH' | 'UPPER_HIGH' | 'MID' | 'LOWER_MID' | 'LOW' | '';
+
+export interface IProductForm {
+  title: string;
+  category: string;
+  price: number;
+  images: string[];
+  content: string;
+  is_direct: boolean;
+  direct_address: string;
+  is_parcel: boolean;  // 직거래 여부
+  product_state: TProductState;
+}

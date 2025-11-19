@@ -6,10 +6,10 @@ import { Button } from "../ui/button";
 import { useRouter } from 'next/navigation';
 
 export default function SubHeader({
-  title, mode = "main"
-}: { title: string; mode?: "main" | "sub"; }) {
+  title, mode = "main", onBackClick
+}: { title: string; mode?: "main" | "sub"; onBackClick?: () => void; }) {
   const router = useRouter();
-
+  const handleBack = onBackClick || (() => router.back());
   return (
     <>
       <div className="bg-white border-b px-4 py-4">
@@ -23,7 +23,7 @@ export default function SubHeader({
           )
           : (
             <div className="flex items-center justify-between">
-              <ChevronLeft className="w-6" onClick={() => router.back()} />
+              <ChevronLeft className="w-6" onClick={handleBack} />
               <h1 className="text-xl font-semibold">{title}</h1>
               <span className="w-6"></span>
             </div>

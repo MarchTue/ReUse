@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
 
@@ -20,6 +21,10 @@ const throttle = (func: (...args: any[]) => void, delay: number) => {
 
 export default function PostButton() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const router = useRouter();
+  const onButtonClick = () => {
+    return router.push("./product/add");
+  };
 
   const handleScroll = useCallback(() => {
     const curY = window.scrollY;
@@ -55,7 +60,9 @@ export default function PostButton() {
         transition-all duration-200 
         p-0 h-10 overflow-hidden
         ${containerClasses}
-    `}>
+    `}
+      onClick={onButtonClick}
+    >
 
       <span className={`
           text-white font-semibold whitespace-nowrap

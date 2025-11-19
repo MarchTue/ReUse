@@ -53,7 +53,7 @@ export default function WalletMainPage() {
 
   return (
     <div>
-      <SubHeader title="지갑 메뉴" />
+      <SubHeader title="지갑 메뉴" mode="sub" />
       {/* 지갑 상태 */}
 
       <div className="p-4 bg-gray-50 border-b">
